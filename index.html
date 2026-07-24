@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12151a">
+<title>Xe Hợp Đồng</title>
+<link rel="manifest" id="mfLink">
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<!-- iPhone: đọc mấy thẻ apple-* này chứ KHÔNG đọc manifest, nên phải khai riêng. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<!-- Icon màn hình chính nhúng thẳng dạng data: nên kho không cần tệp ảnh rời.
+     Nếu sau này iPhone không nhận (hiện ảnh chụp trang thay vì biển số vàng):
+     đẩy icon-180.png lên kho, rồi thêm một thẻ link apple-touch-icon
+     sizes 180x180 trỏ tới ./icon-180.png ngay dưới dòng này. -->
+<meta name="apple-mobile-web-app-title" content="Xe Hợp Đồng">
+<script>(function(){
+  /* ============ CÀI VÀO MÀN HÌNH CHÍNH ============
+     Chạy ngay ở đầu trang, KHÔNG chờ Firebase. Icon nhúng sẵn dạng PNG
+     base64 (không vẽ bằng canvas nữa — vẽ lúc chạy dễ hỏng thầm lặng).
+     start_url/scope/id BẮT BUỘC tuyệt đối vì manifest là blob:. */
+  'use strict';
+  var I192 = "data:image/png;base64,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";
+  var I512 = "data:image/png;base64,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";
+  var IMSK = "data:image/png;base64,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AAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAP/xb2CxVJQY/vO7AAAAAElFTkSuQmCC";
+  try{
+    var p = location.pathname, dir = p.slice(0, p.lastIndexOf("/")+1), f = p.slice(dir.length);
+    var start = location.origin + ((f === "" || f === "index.html") ? dir : p);
+    var m = { name:"Xe Hợp Đồng — quản lý chuyến & hợp đồng", short_name:"Xe Hợp Đồng", description:"Lập hợp đồng vận chuyển, xếp lịch điều xe, danh sách hành khách và thu chi.",
+      id:start, start_url:start, scope:location.origin + dir,
+      display:"standalone", orientation:"portrait",
+      background_color:"#12151a", theme_color:"#12151a", lang:"vi",
+      icons:[ {src:I192, sizes:"192x192", type:"image/png", purpose:"any"},
+              {src:I512, sizes:"512x512", type:"image/png", purpose:"any"},
+              {src:IMSK, sizes:"512x512", type:"image/png", purpose:"maskable"} ] };
+    var b = new Blob([JSON.stringify(m)], {type:"application/manifest+json"});
+    document.getElementById("mfLink").href = URL.createObjectURL(b);
+  }catch(e){ console.warn("manifest:", e); }
+
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("./sw.js").catch(function(e){ console.warn("sw:", e); });
+    });
+  }
+
+  /* ---- thanh mời cài + tự chẩn đoán khi không cài được ---- */
+  var dp = null, UA = navigator.userAgent || "";
+  var iOS = /iPhone|iPad|iPod/i.test(UA);
+  function daCai(){ try{
+    return (matchMedia && (matchMedia("(display-mode: standalone)").matches ||
+            matchMedia("(display-mode: fullscreen)").matches)) ||
+           navigator.standalone === true ||
+           (document.referrer||"").indexOf("android-app://") === 0;
+  }catch(e){ return false; } }
+
+  function thanh(html, nut){
+    var d = document.createElement("div");
+    d.id = "caiBar";
+    d.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:2147482000;background:#f5c518;color:#141414;"
+      + "font:600 13.5px/1.4 system-ui,-apple-system,Roboto,sans-serif;padding:calc(9px + env(safe-area-inset-top,0px)) 12px 9px;"
+      + "display:flex;align-items:center;gap:9px;box-shadow:0 6px 22px rgba(0,0,0,.45)";
+    d.innerHTML = '<img src="' + I192 + '" style="width:30px;height:30px;border-radius:8px;flex:none">'
+      + '<div style="flex:1">' + html + '</div>' + nut
+      + '<button id="caiX" style="background:none;border:0;font-size:22px;line-height:1;color:#141414;padding:0 2px">&times;</button>';
+    document.body.appendChild(d);
+    document.getElementById("caiX").onclick = function(){ d.remove(); };
+    return d;
+  }
+  function nutStyle(){ return "background:#141414;color:#f5c518;border:0;border-radius:8px;padding:8px 12px;font:700 13px system-ui;flex:none"; }
+
+  function moiCai(){
+    if(document.getElementById("caiBar")) return;
+    thanh("Cài vào màn hình chính để mở nhanh, dùng được cả khi mạng yếu.",
+          '<button id="caiGo" style="' + nutStyle() + '">Cài đặt</button>');
+    document.getElementById("caiGo").onclick = function(){
+      if(!dp) return;
+      dp.prompt();
+      dp.userChoice.then(function(){ dp = null; var b=document.getElementById("caiBar"); if(b) b.remove(); });
+    };
+  }
+
+  function chanDoan(){
+    var t = [];
+    t.push((location.protocol === "https:" ? "✔" : "✘") + " Mở bằng địa chỉ https");
+    var l = document.getElementById("mfLink");
+    t.push((l && l.href ? "✔" : "✘") + " Manifest đã gắn");
+    t.push((daCai() ? "✔ Máy báo ĐÃ CÀI rồi — tìm icon trên màn hình chính, hoặc gỡ ra cài lại" : "· Chưa cài"));
+    if(iOS) t.push("· iPhone: bấm nút Chia sẻ rồi chọn Thêm vào MH chính");
+    var xong = function(){
+      alert("Kiểm tra cài đặt:\n\n" + t.join("\n")
+        + "\n\nNếu tất cả đều ✔ mà vẫn không có nút cài: tải lại trang thêm 1 lần (Chrome cần lần thứ hai),"
+        + " hoặc vào Chrome ⋮ > Cài đặt ứng dụng.");
+    };
+    if(navigator.serviceWorker){
+      navigator.serviceWorker.getRegistration().then(function(r){
+        t.splice(2, 0, (r ? "✔" : "✘") + " Service worker đã chạy" + (r ? "" : " (thiếu file sw.js trong kho)"));
+        xong();
+      }).catch(xong);
+    } else { t.splice(2,0,"✘ Trình duyệt không hỗ trợ service worker"); xong(); }
+  }
+
+  window.addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault(); dp = e;
+    if(!daCai()) setTimeout(moiCai, 800);
+  });
+  window.addEventListener("appinstalled", function(){
+    dp = null; var b = document.getElementById("caiBar"); if(b) b.remove();
+  });
+  document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(function(){
+      if(dp || daCai() || document.getElementById("caiBar")) return;
+      thanh(iOS ? "Trên iPhone: bấm nút <b>Chia sẻ</b> rồi chọn <b>Thêm vào MH chính</b>."
+                : "Chưa cài được vào màn hình chính?",
+            '<button id="caiHoi" style="' + nutStyle() + '">Kiểm tra</button>');
+      document.getElementById("caiHoi").onclick = chanDoan;
+    }, 4000);
+  });
+})();</script>
+<style>
+:root{
+  --nhua:#12151a; --than:#191d24; --panel:#20252e; --vach:#2c333d;
+  --son:#e9ecf1; --mo:#8b95a5; --mo2:#5d6673;
+  --bien:#f5c518; --bien-d:#c99f0a;
+  --canh:#ff4d4f; --chay:#3ddc97; --xanh:#4aa8ff; --tim:#b085f5;
+  --r:10px; --sp:12px;
+  --fdisp:'Roboto Condensed','Arial Narrow',ui-sans-serif,system-ui,sans-serif;
+  --fbody:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --fnum:ui-monospace,'Roboto Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--nhua);color:var(--son);font-family:var(--fbody);
+  font-size:15px;line-height:1.45;overscroll-behavior-y:none;
+  padding-bottom:calc(62px + env(safe-area-inset-bottom));
+}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--bien);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- BIỂN SỐ: chi tiết chữ ký của app ---------- */
+.plate{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(#ffdc4a,#efbe0b);color:#101010;
+  font-family:var(--fdisp);font-weight:700;font-size:14px;letter-spacing:.6px;
+  padding:3px 8px;border-radius:5px;border:1.5px solid #101010;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.18);white-space:nowrap;text-transform:uppercase;
+}
+.plate.sm{font-size:12px;padding:1px 6px;border-width:1px}
+.plate.lg{font-size:19px;padding:5px 11px}
+
+/* ---------- TOPBAR ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;background:rgba(18,21,26,.94);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--vach);
+  padding:calc(8px + env(safe-area-inset-top)) 12px 8px;
+  display:flex;align-items:center;gap:10px;
+}
+.topbar h1{font-family:var(--fdisp);font-size:17px;margin:0;font-weight:700;letter-spacing:.3px;flex:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .sub{display:block;font-family:var(--fbody);font-size:11px;color:var(--mo);font-weight:400;letter-spacing:0}
+.sync{
+  border:1px solid var(--vach);background:var(--than);color:var(--mo);
+  border-radius:20px;padding:5px 11px;font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer
+}
+.sync.dirty{border-color:var(--bien);color:var(--bien)}
+.sync .dot{width:7px;height:7px;border-radius:50%;background:var(--chay)}
+.sync.dirty .dot{background:var(--bien);animation:pulse 1.4s infinite}
+.sync.off .dot{background:var(--canh)}
+@keyframes pulse{50%{opacity:.25}}
+
+/* ---------- NAV ---------- */
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:repeat(5,1fr);
+  background:rgba(25,29,36,.97);backdrop-filter:blur(10px);border-top:1px solid var(--vach);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.nav button{
+  background:none;border:0;padding:8px 2px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:var(--mo2);font-size:10.5px;cursor:pointer;position:relative
+}
+.nav button svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nav button.on{color:var(--bien)}
+.nav button.on::before{content:"";position:absolute;top:0;left:22%;right:22%;height:2px;background:var(--bien);border-radius:0 0 3px 3px}
+.nav .badge{position:absolute;top:4px;right:calc(50% - 20px);background:var(--canh);color:#fff;
+  font-size:9px;font-weight:700;min-width:15px;height:15px;border-radius:8px;display:grid;place-items:center;padding:0 3px}
+
+/* ---------- LAYOUT ---------- */
+.view{display:none;padding:12px 12px 20px}
+.view.on{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}}
+.card{background:var(--than);border:1px solid var(--vach);border-radius:var(--r);padding:12px;margin-bottom:10px}
+.card.tap{cursor:pointer}
+.card.tap:active{background:var(--panel)}
+.hd{display:flex;align-items:center;gap:8px;margin:16px 0 8px}
+.hd:first-child{margin-top:2px}
+.hd h2{font-family:var(--fdisp);font-size:13px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mo);margin:0;font-weight:700}
+.hd .line{flex:1;height:1px;background:var(--vach)}
+.hd a,.hd .act{font-size:12px;color:var(--bien);text-decoration:none;cursor:pointer}
+.mo{color:var(--mo)}.sm{font-size:12.5px}.xs{font-size:11.5px}
+.num{font-family:var(--fnum);font-variant-numeric:tabular-nums}
+.rowf{display:flex;align-items:center;gap:8px}
+.rowf .grow{flex:1;min-width:0}
+.trunc{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.empty{text-align:center;padding:34px 16px;color:var(--mo2)}
+.empty b{display:block;color:var(--mo);font-size:14px;margin-bottom:4px;font-weight:600}
+
+/* ---------- CHIP / BUTTON ---------- */
+.chip{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid var(--vach);color:var(--mo);white-space:nowrap}
+.chip.ok{color:var(--chay);border-color:rgba(61,220,151,.4);background:rgba(61,220,151,.09)}
+.chip.warn{color:var(--bien);border-color:rgba(245,197,24,.4);background:rgba(245,197,24,.09)}
+.chip.bad{color:var(--canh);border-color:rgba(255,77,79,.4);background:rgba(255,77,79,.1)}
+.chip.run{color:var(--xanh);border-color:rgba(74,168,255,.4);background:rgba(74,168,255,.1)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--panel);border:1px solid var(--vach);color:var(--son);
+  border-radius:9px;padding:10px 14px;font-size:14px;cursor:pointer;font-weight:500
+}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--bien);border-color:var(--bien);color:#141414;font-weight:700}
+.btn.dan{color:var(--canh);border-color:rgba(255,77,79,.45)}
+.btn.blk{width:100%}
+.btn.sm{padding:6px 10px;font-size:12.5px;border-radius:7px}
+.btns{display:flex;gap:8px}.btns>*{flex:1}
+.fab{
+  position:fixed;right:14px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:45;
+  width:52px;height:52px;border-radius:50%;background:var(--bien);color:#141414;border:0;
+  font-size:28px;line-height:1;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.5);display:none;place-items:center
+}
+.fab.on{display:grid}
+
+/* ---------- NÚT HOTLINE NỔI (giống app Sổ Nợ · Bán Hàng) ---------- */
+#hotlineFab{
+  position:fixed;left:14px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:45;
+  display:none;align-items:center;gap:6px;background:#16a34a;color:#fff;text-decoration:none;
+  padding:11px 16px;border-radius:30px;font-weight:800;font-size:13.5px;font-family:inherit;
+  white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.45)
+}
+#hotlineFab.on{display:inline-flex}
+#hotlineFab:active{transform:scale(.96)}
+
+/* ---------- FORM ---------- */
+.f{margin-bottom:11px}
+.f label{display:block;font-size:11.5px;color:var(--mo);margin-bottom:4px;letter-spacing:.2px}
+.f label .req{color:var(--canh)}
+.f input,.f select,.f textarea{
+  width:100%;background:var(--nhua);border:1px solid var(--vach);border-radius:8px;
+  padding:10px 11px;font-size:15px;color:var(--son)
+}
+.f textarea{min-height:64px;resize:vertical}
+.f input::placeholder{color:var(--mo2)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.f .hint{font-size:11px;color:var(--mo2);margin-top:3px}
+.f.err input,.f.err select{border-color:var(--canh)}
+
+/* ---------- SHEET / MODAL ---------- */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:60;display:none}
+.mask.on{display:block}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--than);
+  border-radius:16px 16px 0 0;border-top:1px solid var(--vach);
+  max-height:92vh;display:none;flex-direction:column;transform:translateY(100%)
+}
+.sheet.on{display:flex;animation:up .22s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes up{to{transform:translateY(0)}}
+.sheet-h{padding:14px 14px 10px;border-bottom:1px solid var(--vach);display:flex;align-items:center;gap:10px}
+.sheet-h h3{margin:0;font-family:var(--fdisp);font-size:17px;flex:1;font-weight:700}
+.sheet-h .x{background:none;border:0;color:var(--mo);font-size:26px;line-height:1;cursor:pointer;padding:0 4px}
+.sheet-b{padding:14px;overflow:auto;-webkit-overflow-scrolling:touch}
+.sheet-f{padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--vach);display:flex;gap:8px}
+.sheet-f>*{flex:1}
+
+/* ---------- LỊCH ĐIỀU XE (làn đường) ---------- */
+.lich-wrap{border:1px solid var(--vach);border-radius:var(--r);overflow:hidden;background:var(--than)}
+.lich-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.lich{min-width:640px}
+.lich-head{display:flex;background:var(--panel);border-bottom:1px solid var(--vach);position:sticky;top:0;z-index:2}
+.lich-head .cell,.lane .cell{flex:1 0 84px;padding:6px 4px;text-align:center;font-size:11px;border-left:1px solid var(--vach)}
+.lich-head .cell b{display:block;font-family:var(--fdisp);font-size:15px}
+.lich-head .cell.today{background:rgba(245,197,24,.13);color:var(--bien)}
+.lich-head .fix,.lane .fix{
+  flex:0 0 108px;position:sticky;left:0;z-index:3;background:var(--panel);
+  padding:6px 8px;border-right:1px solid var(--vach);display:flex;align-items:center
+}
+.lane{display:flex;border-bottom:1px solid var(--vach);min-height:52px;position:relative}
+.lane:last-child{border-bottom:0}
+.lane .fix{background:var(--than);flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.lane .cell{border-left:1px dashed var(--vach);padding:4px 3px;display:flex;flex-direction:column;gap:3px;justify-content:center}
+.blk{
+  background:rgba(74,168,255,.16);border-left:3px solid var(--xanh);border-radius:4px;
+  padding:3px 5px;font-size:10.5px;line-height:1.25;cursor:pointer;text-align:left;overflow:hidden
+}
+.blk b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.blk.done{background:rgba(61,220,151,.13);border-color:var(--chay)}
+.blk.cancel{background:rgba(139,149,165,.12);border-color:var(--mo2);text-decoration:line-through;opacity:.65}
+.blk.clash{background:repeating-linear-gradient(45deg,rgba(255,77,79,.22) 0 6px,rgba(255,77,79,.08) 6px 12px);border-color:var(--canh)}
+.lane .fix .stt{width:7px;height:7px;border-radius:50%;background:var(--chay);position:absolute;left:4px;top:6px}
+.lich-legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 10px;font-size:11px;color:var(--mo);border-top:1px solid var(--vach)}
+.lich-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+
+/* ---------- LIST ITEM ---------- */
+.item{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--vach);cursor:pointer}
+.item:last-child{border-bottom:0}
+.item .l{flex:1;min-width:0}
+.item .r{text-align:right;flex-shrink:0}
+.item .t{font-weight:600;font-size:14.5px}
+.item .d{font-size:12px;color:var(--mo);margin-top:2px}
+.money{font-family:var(--fnum);font-weight:700;font-size:14.5px}
+.money.in{color:var(--chay)}.money.out{color:var(--canh)}
+
+/* ---------- ALERT BANNER ---------- */
+.alert{display:flex;gap:9px;align-items:flex-start;background:rgba(255,77,79,.09);border:1px solid rgba(255,77,79,.32);
+  border-radius:var(--r);padding:10px 11px;margin-bottom:10px;font-size:13px}
+.alert.warn{background:rgba(245,197,24,.08);border-color:rgba(245,197,24,.32)}
+.alert b{display:block;margin-bottom:2px}
+.alert .ic{font-size:15px;line-height:1.2}
+
+/* ---------- TOAST ---------- */
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + env(safe-area-inset-bottom));
+  background:var(--panel);border:1px solid var(--vach);color:var(--son);padding:10px 16px;border-radius:22px;
+  font-size:13.5px;z-index:90;opacity:0;pointer-events:none;transition:opacity .2s;max-width:88vw;text-align:center}
+#toast.on{opacity:1}
+#toast.bad{border-color:var(--canh);color:#ffd7d7}
+
+/* ---------- GATE (đăng nhập / hết hạn) ---------- */
+#gate{position:fixed;inset:0;background:var(--nhua);z-index:100;display:none;overflow:auto}
+#gate.on{display:block}
+.gate-in{max-width:400px;margin:0 auto;padding:44px 22px}
+.gate-logo{text-align:center;margin-bottom:26px}
+.gate-logo .plate{font-size:22px;padding:7px 14px}
+.gate-logo p{color:var(--mo);font-size:12.5px;margin:12px 0 0;letter-spacing:2.6px;text-transform:uppercase;font-family:var(--fdisp)}
+.tabs{display:flex;background:var(--than);border:1px solid var(--vach);border-radius:9px;padding:3px;margin-bottom:16px}
+.tabs button{flex:1;background:none;border:0;padding:8px;border-radius:7px;color:var(--mo);font-size:13.5px;cursor:pointer}
+.tabs button.on{background:var(--bien);color:#141414;font-weight:700}
+.qr-box{background:#fff;border-radius:10px;padding:10px;text-align:center;margin:10px 0}
+.qr-box img{width:100%;max-width:250px;display:block;margin:0 auto}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--vach);font-size:13.5px}
+.kv:last-child{border-bottom:0}
+.kv .k{color:var(--mo)}
+.kv .v{text-align:right;font-weight:600;word-break:break-word}
+.kv .v.copy{cursor:pointer;color:var(--bien)}
+
+/* ---------- IN ẤN: hợp đồng + danh sách hành khách ---------- */
+#print{display:none}
+@media print{
+  body{background:#fff;color:#000;padding:0;font-size:12pt}
+  .topbar,.nav,.fab,#hotlineFab,.view,.sheet,.mask,#gate,#toast{display:none!important}
+  #print{display:block;padding:0}
+  .p-page{page-break-after:always;padding:10mm 8mm}
+  .p-page:last-child{page-break-after:auto}
+  .p-h{text-align:center;margin-bottom:10px}
+  .p-h .qh{font-size:11pt;font-weight:700}
+  .p-h .dl{font-size:11pt;border-bottom:1px solid #000;display:inline-block;padding-bottom:2px}
+  .p-t{text-align:center;font-size:15pt;font-weight:700;margin:14px 0 2px}
+  .p-s{text-align:center;font-size:10pt;margin-bottom:12px}
+  .p-b{font-size:11.5pt;line-height:1.6}
+  .p-b h4{margin:10px 0 4px;font-size:11.5pt}
+  .p-b table{width:100%;border-collapse:collapse;margin:6px 0}
+  .p-b td,.p-b th{border:1px solid #000;padding:4px 6px;font-size:10.5pt;text-align:left}
+  .p-sign{display:flex;justify-content:space-between;margin-top:26px;text-align:center;font-size:11pt}
+  .p-sign div{width:46%}
+  .p-sign b{display:block}
+  .p-sign span{display:block;color:#555;font-size:9.5pt;font-style:italic;margin-bottom:52px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ CỔNG: đăng nhập / dùng thử / gia hạn ============ -->
+<div id="gate" class="on"><div class="gate-in">
+  <div class="gate-logo">
+    <span class="plate">XE HỢP ĐỒNG</span>
+    <p>Quản lý chuyến &amp; hợp đồng</p>
+  </div>
+  <div id="gateBody"></div>
+</div></div>
+
+<!-- ============ APP ============ -->
+<header class="topbar" id="topbar" style="display:none">
+  <h1 id="tenDV">Nhà xe<span class="sub" id="hanDung">—</span></h1>
+  <button class="sync" id="btnSync"><span class="dot"></span><span id="syncTxt">Đã lưu</span></button>
+</header>
+
+<!-- 1. LỊCH ĐIỀU XE -->
+<section class="view" id="v-lich">
+  <div id="canhBao"></div>
+  <div class="hd"><h2>Lịch điều xe</h2><span class="line"></span><span class="act" id="lichPrev">‹</span><span class="act" id="lichNext">›</span></div>
+  <div class="lich-wrap">
+    <div class="lich-scroll"><div class="lich" id="lichBody"></div></div>
+    <div class="lich-legend">
+      <span><i style="background:var(--xanh)"></i>Đã lên lịch</span>
+      <span><i style="background:var(--chay)"></i>Hoàn thành</span>
+      <span><i style="background:var(--canh)"></i>Trùng xe</span>
+      <span><i style="background:var(--mo2)"></i>Đã hủy</span>
+    </div>
+  </div>
+  <div class="hd"><h2>Chạy hôm nay</h2><span class="line"></span></div>
+  <div class="card" id="homNay"></div>
+</section>
+
+<!-- 2. HỢP ĐỒNG -->
+<section class="view" id="v-hd">
+  <div class="hd"><h2>Hợp đồng vận chuyển</h2><span class="line"></span></div>
+  <div class="f"><input id="timHD" placeholder="Tìm mã HĐ, khách, biển số…"></div>
+  <div class="card" id="dsHD"></div>
+</section>
+
+<!-- 3. CHUYẾN -->
+<section class="view" id="v-chuyen">
+  <div class="hd"><h2>Chuyến xe</h2><span class="line"></span>
+    <select id="locChuyen" style="background:var(--than);border:1px solid var(--vach);border-radius:7px;padding:4px 7px;font-size:12px">
+      <option value="7">7 ngày tới</option><option value="0">Hôm nay</option>
+      <option value="30">30 ngày tới</option><option value="-30">30 ngày qua</option><option value="all">Tất cả</option>
+    </select>
+  </div>
+  <div class="card" id="dsChuyen"></div>
+</section>
+
+<!-- 4. XE & TÀI XẾ -->
+<section class="view" id="v-xe">
+  <div class="tabs" id="tabXe">
+    <button class="on" data-t="xe">Xe</button><button data-t="tx">Tài xế</button><button data-t="kh">Khách hàng</button>
+  </div>
+  <div class="card" id="dsXe"></div>
+</section>
+
+<!-- 5. THU CHI -->
+<section class="view" id="v-tien">
+  <div class="hd"><h2>Kết quả tháng</h2><span class="line"></span>
+    <input type="month" id="thangBC" style="background:var(--than);border:1px solid var(--vach);border-radius:7px;padding:4px 7px;font-size:12px;color:var(--son)">
+  </div>
+  <div id="bcTong"></div>
+  <div class="hd"><h2>Lãi lỗ theo xe</h2><span class="line"></span></div>
+  <div class="card" id="bcXe"></div>
+  <div class="hd"><h2>Công nợ khách</h2><span class="line"></span></div>
+  <div class="card" id="bcNo"></div>
+  <div class="hd"><h2>Sổ thu chi</h2><span class="line"></span><span class="act" id="themThuChi">+ Phiếu</span></div>
+  <div class="card" id="dsThuChi"></div>
+  <div class="hd"><h2>Hệ thống</h2><span class="line"></span></div>
+  <div class="btns" style="flex-direction:column">
+    <button class="btn blk" id="btnCauHinh">Thông tin đơn vị vận tải</button>
+    <button class="btn blk" id="btnGiaHan">Gói thuê &amp; gia hạn</button>
+    <button class="btn blk" id="btnXuat">Xuất sao lưu (JSON)</button>
+    <button class="btn blk dan" id="btnThoat">Đăng xuất</button>
+  </div>
+  <p class="xs mo" style="text-align:center;margin-top:14px" id="verTxt"></p>
+</section>
+
+<button class="fab" id="fab">+</button>
+
+<!-- NAV -->
+<nav class="nav" id="nav" style="display:none">
+  <button data-v="lich" class="on"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Lịch xe</button>
+  <button data-v="hd"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Hợp đồng</button>
+  <button data-v="chuyen"><svg viewBox="0 0 24 24"><path d="M3 17V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10"/><path d="M17 9h2.5L22 13v4h-5"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg>Chuyến</button>
+  <button data-v="xe"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>Xe &amp; TX</button>
+  <button data-v="tien"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 12h.01M18 12h.01"/></svg>Thu chi</button>
+</nav>
+
+<!-- SHEET -->
+<div class="mask" id="mask"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-h"><h3 id="shT">—</h3><button class="x" id="shX">×</button></div>
+  <div class="sheet-b" id="shB"></div>
+  <div class="sheet-f" id="shF"></div>
+</div>
+
+<!-- Nút gọi hỗ trợ: chỉ hiện khi khách đã vào được app, ẩn với tài khoản chủ -->
+<a id="hotlineFab" href="tel:0977823979" aria-label="Gọi hotline hỗ trợ">📞 Hotline</a>
+
+<div id="toast"></div>
+<div id="print"></div>
+<script type="module">
+/* ==================================================================
+   XE HỢP ĐỒNG — app quản lý xe hợp đồng (bản 1.0)
+   Kho riêng, chạy trên GitHub Pages, dùng chung Firebase với các app khác.
+   ⚠️ SỬA 3 CHỖ TRONG KHỐI CFG BÊN DƯỚI TRƯỚC KHI DEPLOY.
+   ================================================================== */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+         sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+         CACHE_SIZE_UNLIMITED, doc, getDoc, setDoc, collection, getDocs, writeBatch, deleteDoc, addDoc }
+         from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const CFG = {
+  fb: {
+    apiKey:"AIzaSyA_kjQ-CdASRkf50Glz3kQajlkD5qGWC4k",
+    authDomain:"so-no-cc57a.firebaseapp.com",
+    projectId:"so-no-cc57a",
+    storageBucket:"so-no-cc57a.firebasestorage.app",
+    messagingSenderId:"571694791559",
+    appId:"1:571694791559:web:8e409728a520e2d370b122"
+  },
+  adminEmail:"cuahangminhtri1@gmail.com",
+  hotline:"0977823979",   // số hỗ trợ hiện trên nút 📞 Hotline và các màn hình cổng
+  thuThu:15,            // bằng TRIAL_DAYS của các app cũ
+  giaMac:200000,        // chỉ dùng khi billing/info chưa đặt priceHd
+  thang:[1,3,12],
+  app:"hd", ver:"1.0.0"
+};
+
+/* Số hỗ trợ — dùng lại ở nút nổi 📞 Hotline và ở các màn hình cổng. */
+const HOTLINE = (CFG.hotline||"").replace(/[^\d+]/g,"");
+const soDep   = t => t.replace(/^(\d{4})(\d{3})(\d{3})$/, "$1 $2 $3");
+const DONG_HOTRO = HOTLINE ? `<p class="xs mo" style="text-align:center;margin-top:16px">Cần hỗ trợ hoặc chỉnh sửa? `
+  + `<a href="tel:${HOTLINE}" style="color:var(--bien);font-weight:800;text-decoration:none;white-space:nowrap">📞 Gọi ${soDep(HOTLINE)}</a></p>` : "";
+
+/* Số tài khoản nhận tiền và bảng giá lấy từ doc billing/info — cùng chỗ với
+   4 app cũ, sửa một lần trong bảng 👑 là cả hệ đổi theo. */
+let BILL = {};
+async function napBilling(){
+  try{
+    const s = await getDoc(doc(fdb,"billing","info"));
+    if(s.exists()){ BILL = s.data(); try{ localStorage.setItem("billing_info", JSON.stringify(BILL)); }catch(e){} }
+  }catch(e){
+    // Mất mạng: dùng số tài khoản đã lưu để màn hình gia hạn vẫn hiện mã QR.
+    try{ BILL = JSON.parse(localStorage.getItem("billing_info") || "{}"); }catch(_){}
+  }
+}
+const giaThang = () => num(BILL.priceHd) || num(BILL.pricePerMonth) || CFG.giaMac;
+const bkBin = () => BILL.bin || BILL.bankBin || "";
+const bkSo  = () => BILL.account || BILL.acc || "";
+const bkTen = () => BILL.accName || "";
+
+const fbApp = initializeApp(CFG.fb);
+const auth  = getAuth(fbApp);
+/* Bộ nhớ đệm ngoại tuyến ĐA TAB — giống app Sổ Nợ.
+   enableIndexedDbPersistence (bản cũ) chỉ chạy được 1 tab: mở tab thứ hai là
+   bộ đệm tắt im lặng, mất mạng là mất luôn dữ liệu. */
+const fdb = (function(){
+  let coIDB = false;
+  try{ coIDB = (typeof indexedDB !== "undefined" && indexedDB !== null); }catch(e){}
+  if(coIDB){
+    try{
+      return initializeFirestore(fbApp, { localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager(), cacheSizeBytes: CACHE_SIZE_UNLIMITED }) });
+    }catch(e){ console.warn("cache:", e); }
+  }
+  return getFirestore(fbApp);
+})();
+
+/* ------------------------------ tiện ích ------------------------------ */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s??"").replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const num = v => { const n = Number(String(v??"").replace(/[^\d.-]/g,"")); return isFinite(n)?n:0; };
+const tien = v => num(v).toLocaleString("vi-VN");
+const hnay = () => new Date().toISOString().slice(0,10);
+const ngayVN = s => s ? s.slice(0,10).split("-").reverse().join("/") : "";
+const gioVN  = s => s && s.length>10 ? s.slice(11,16) : "";
+const dt = s => s ? new Date(s.length>10 ? s : s+"T00:00") : null;
+const themNgay = (s,n)=>{ const d=dt(s); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); };
+const cachNgay = (a,b)=> Math.round((dt(a)-dt(b))/864e5);
+const THU = ["CN","T2","T3","T4","T5","T6","T7"];
+const dToS = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const chuanNgay = v => !v ? "" : (typeof v==="string" ? v.slice(0,10) : dToS(v.toDate ? v.toDate() : new Date(v)));
+const SO_NGAY_AN_HAN = 3;   // rules cho ân hạn 3 ngày sau khi hết hạn
+
+let tId; function toast(m,bad){ const t=$("#toast"); t.textContent=m; t.className="on"+(bad?" bad":"");
+  clearTimeout(tId); tId=setTimeout(()=>t.className="",2400); }
+
+/* ------------------------------ STORE ------------------------------
+   Nạp toàn bộ dữ liệu 1 lần, sửa trên RAM, ghi theo lô khi có thay đổi
+   thật (so với bản chụp _shadow) → tiết kiệm lượt ghi Firestore.
+   -------------------------------------------------------------------- */
+const COLS = ["xe","tx","kh","hopdong","chuyen","chiphi","thuchi"];
+const DB = {}; COLS.forEach(c=>DB[c]=[]);
+let CH = {};                       // cấu hình đơn vị vận tải
+let SH = {}, XOA = {}, UID = null, LIC = null;
+
+const duong = c => `users/${UID}/${CFG.app}_${c}`;   // users/{uid}/hd_xe … khớp appCua() trong rules
+const chup  = () => { SH={}; COLS.forEach(c=>{ SH[c]={}; DB[c].forEach(o=>SH[c][o.id]=JSON.stringify(o)); }); SH.__ch=JSON.stringify(CH); };
+const khoaCache = () => `${CFG.app}_cache_${UID}`;
+
+/* Bản sao trên máy — viết lại mỗi khi dữ liệu đổi, để mất mạng mở lại vẫn còn đủ.
+   Bọc try/catch vì localStorage có thể đầy hoặc bị chặn ở chế độ riêng tư. */
+function luuBanSao(){
+  try{ localStorage.setItem(khoaCache(), JSON.stringify({DB,CH,t:Date.now()})); }catch(e){}
+}
+function docBanSao(){
+  try{ const c = localStorage.getItem(khoaCache()); return c ? JSON.parse(c) : null; }catch(e){ return null; }
+}
+/* Tính lại "còn gì chưa lưu" từ ảnh chụp SH, thay cho việc xoá sạch cờ bằng tay
+   (xoá sạch bằng tay là nguồn gốc của lỗi nuốt mất thay đổi). */
+function tinhBan(){
+  STORE.ban.clear();
+  COLS.forEach(c=>{
+    if((XOA[c]||[]).length || DB[c].some(o=>SH[c]?.[o.id] !== JSON.stringify(o))) STORE.ban.add(c);
+  });
+  if(JSON.stringify(CH) !== SH.__ch) STORE.ban.add("cauhinh");
+}
+
+const STORE = {
+  ban:new Set(), dangGhi:false, hen:null, cho:false, henBS:null,
+
+  async nap(){
+    const banSao = docBanSao();
+    try{
+      const rs = await Promise.all(COLS.map(c=>getDocs(collection(fdb, duong(c)))));
+      const tuCache = rs.some(r=>r.metadata && r.metadata.fromCache);
+      const tong    = rs.reduce((t,r)=>t + r.size, 0);
+      /* Mất mạng mà bộ đệm Firestore trống thì getDocs trả về RỖNG chứ không báo lỗi.
+         Không chặn ở đây là app ghi đè bản sao trên máy bằng dữ liệu rỗng — mất sạch. */
+      if(tuCache && tong === 0 && banSao) throw new Error("cache-rong");
+      COLS.forEach((c,i)=>{ DB[c] = rs[i].docs.map(d=>({id:d.id, ...d.data()})); });
+      try{
+        const cd = await getDoc(doc(fdb, duong("cauhinh"), "main"));
+        CH = cd.exists() ? cd.data() : {};
+      }catch(e){ CH = (banSao && banSao.CH) || {}; }   // doc cấu hình chưa có trong đệm
+      chup(); XOA={}; this.ban.clear();
+      luuBanSao();
+      if(tuCache) toast("Đang dùng dữ liệu lưu trên máy — chưa có mạng");
+      return true;
+    }catch(e){
+      if(banSao){
+        COLS.forEach(k=>DB[k] = banSao.DB[k] || []); CH = banSao.CH || {};
+        chup(); XOA={}; this.ban.clear();
+        toast("Đang dùng dữ liệu lưu trên máy — chưa có mạng");
+        return true;
+      }
+      throw e;
+    }
+  },
+
+  luu(c, o){                       // thêm mới hoặc cập nhật 1 bản ghi
+    if(!o.id){ o.id = nid(); o.tao = new Date().toISOString(); DB[c].push(o); }
+    else { const i = DB[c].findIndex(x=>x.id===o.id); i<0 ? DB[c].push(o) : DB[c][i]=o; }
+    this.banRuc(c); return o;
+  },
+  xoa(c, id){
+    DB[c] = DB[c].filter(x=>x.id!==id);
+    (XOA[c] = XOA[c]||[]).push(id);
+    this.banRuc(c);
+  },
+  banRuc(c){
+    this.ban.add(c); capNhatNutLuu();
+    clearTimeout(this.henBS); this.henBS = setTimeout(luuBanSao, 400);   // giữ bản sao luôn mới
+  },
+
+  async ghi(im){                   // ghi thật xuống Firestore
+    if(this.dangGhi || !UID) return;
+    const viec = [];                                   // gom việc cần ghi
+    for(const c of COLS){
+      for(const o of DB[c]){ const j=JSON.stringify(o); if(SH[c]?.[o.id]!==j) viec.push(["set",duong(c),o.id,o]); }
+      for(const id of (XOA[c]||[])) viec.push(["del",duong(c),id]);
+    }
+    if(JSON.stringify(CH)!==SH.__ch) viec.push(["set",duong("cauhinh"),"main",CH]);
+    const n = viec.length;
+    if(!n){ tinhBan(); capNhatNutLuu(); return; }
+
+    /* Chụp ĐÚNG trạng thái vừa đưa vào lô. Chờ xong mới chụp thì những sửa phát sinh
+       trong lúc chờ sẽ bị đánh dấu nhầm là "đã lưu" và không bao giờ lên máy chủ. */
+    const anh = {}; COLS.forEach(c=>{ anh[c]={}; DB[c].forEach(o=>anh[c][o.id]=JSON.stringify(o)); });
+    anh.__ch = JSON.stringify(CH);
+    const daGuiXoa = {}; COLS.forEach(c=>daGuiXoa[c] = [...(XOA[c]||[])]);
+
+    this.dangGhi = true; capNhatNutLuu();
+    try{
+      const lo = [];
+      for(let i=0;i<n;i+=400){                         // Firestore giới hạn 500 thao tác / lô
+        const b = writeBatch(fdb);
+        viec.slice(i,i+400).forEach(([kieu,d,id,o])=> kieu==="set" ? b.set(doc(fdb,d,id),o) : b.delete(doc(fdb,d,id)));
+        lo.push(b.commit());
+      }
+      lo.forEach(p=>p.catch(()=>{}));                  // tránh cảnh báo promise treo
+      /* Mất mạng thì commit() KHÔNG BAO GIỜ resolve — Firestore chỉ báo xong khi máy chủ nhận.
+         Chờ mãi là nút kẹt "Đang lưu…" vĩnh viễn và mọi lần lưu sau đều bị chặn.
+         Ghi đã nằm trong hàng đợi của Firestore rồi nên chỉ cần chờ có hạn. */
+      const xong = await Promise.race([
+        Promise.all(lo).then(()=>true, ()=>false),
+        new Promise(r=>setTimeout(()=>r(null), 6000))
+      ]);
+      if(xong === false){                              // máy chủ từ chối: GIỮ NGUYÊN cờ để còn thử lại
+        toast("Máy chủ từ chối ghi — kiểm tra hạn dùng rồi thử lại", 1);
+        return;
+      }
+      SH = anh;
+      COLS.forEach(c=>{ const g = new Set(daGuiXoa[c]); XOA[c] = (XOA[c]||[]).filter(id=>!g.has(id)); });
+      tinhBan(); luuBanSao();
+      if(xong === true){ this.cho = false; if(!im) toast("Đã lưu " + n + " thay đổi"); }
+      else{                                            // hết giờ chờ = đang ngoại tuyến
+        this.cho = true;
+        Promise.all(lo).then(()=>{ this.cho = false; capNhatNutLuu(); }, ()=>{});
+        if(!im) toast("Đã lưu vào máy — tự gửi lên khi có mạng");
+      }
+    }catch(e){ toast("Chưa lưu được — sẽ thử lại khi có mạng", 1); console.error(e); }
+    finally{ this.dangGhi = false; capNhatNutLuu(); }
+  },
+  ghiMem(){ clearTimeout(this.hen); this.hen = setTimeout(()=>this.ghi(true), 1500); }  // không chặn giao diện
+};
+function capNhatNutLuu(){
+  const b=$("#btnSync"), t=$("#syncTxt"); if(!b) return;
+  if(STORE.dangGhi){ b.className="sync dirty"; t.textContent="Đang lưu…"; }
+  else if(STORE.ban.size){ b.className="sync dirty"; t.textContent="Lưu ngay"; }
+  else if(!navigator.onLine){ b.className="sync off"; t.textContent = STORE.cho ? "Chờ gửi" : "Ngoại tuyến"; }
+  else if(STORE.cho){ b.className="sync dirty"; t.textContent="Đang gửi…"; }
+  else { b.className="sync"; t.textContent="Đã lưu"; }
+}
+window.addEventListener("online", ()=>{ capNhatNutLuu(); STORE.ghi(true); });
+window.addEventListener("offline", ()=>{ capNhatNutLuu(); toast("Mất mạng — vẫn ghi được, có mạng sẽ tự gửi lên"); });
+window.addEventListener("beforeunload", e=>{ if(STORE.ban.size){ e.preventDefault(); e.returnValue=""; } });
+
+/* ------------------------------ GIẤY PHÉP ------------------------------ */
+const khoaLic = () => `${CFG.app}_lic_${UID}`;
+/* Bản giấy phép lưu trên máy: chỉ để mở app khi mất mạng. Hạn dùng vẫn tính theo
+   ngày ghi trong đó nên hết hạn là vẫn khoá — không lách được bằng cách tắt mạng. */
+function ghiLicMay(l){ try{ localStorage.setItem(khoaLic(), JSON.stringify({ l, t: Date.now() })); }catch(e){} }
+function docLicMay(){
+  try{
+    const o = JSON.parse(localStorage.getItem(khoaLic()) || "null");
+    if(!o || !o.l) return null;
+    if(Date.now() < (o.t||0) - 864e5) return null;    // đồng hồ máy bị vặn lùi → bắt nối mạng
+    return o.l;
+  }catch(e){ return null; }
+}
+async function docGiayPhep(){
+  const r = doc(fdb, `accounts/${UID}/lic`, CFG.app);
+  let s;
+  try{ s = await getDoc(r); }
+  catch(e){
+    // Mất mạng và doc chưa nằm trong bộ đệm thì getDoc BÁO LỖI chứ không trả rỗng.
+    const b = docLicMay(); if(b) return b;
+    throw e;
+  }
+  if(s.exists()){
+    const d = s.data();
+    const l = { ...d, khoa: d.active === false,
+             goi: d.goi || (d.trial ? "dùng thử" : "đã thanh toán"),
+             hanDen: chuanNgay(d.paidUntil) };        // không có paidUntil = vĩnh viễn
+    ghiLicMay(l);
+    return l;
+  }
+  /* Chưa có giấy phép mà đang ngoại tuyến: setDoc sẽ treo mãi vì Firestore chờ máy chủ.
+     Dừng sớm để app báo rõ thay vì đứng ở màn hình "Đang tải dữ liệu…". */
+  if(!navigator.onLine || (s.metadata && s.metadata.fromCache)){
+    const b = docLicMay(); if(b) return b;
+    throw new Error("chua-co-giay-phep-offline");
+  }
+  // Tài khoản mới: tự cấp bản dùng thử, đúng khuôn quy tắc đang chạy
+  // (trial + trialUsed + paidUntil kiểu timestamp, dưới 16 ngày, tạo đúng 1 lần).
+  const d0 = new Date(); d0.setDate(d0.getDate() + CFG.thuThu); d0.setHours(23,59,0,0);
+  await setDoc(r, { app:CFG.app, trial:true, trialUsed:true, active:true, paidUntil:d0, startedAt:new Date() });
+  try{ await setDoc(doc(fdb,"accounts",UID), { email:auth.currentUser?.email||"", createdAt:new Date() }); }catch(e){}
+  const l0 = { app:CFG.app, goi:"dùng thử", hanDen: dToS(d0) };
+  ghiLicMay(l0);
+  return l0;
+}
+const conHan = l => !!l && !l.khoa && (!l.hanDen || cachNgay(l.hanDen, hnay()) >= 0);
+
+/* ------------------------------ CỔNG VÀO ------------------------------ */
+function moCong(html){ $("#gate").classList.add("on"); $("#gateBody").innerHTML = html; hienHotline(false); }
+function dongCong(){ $("#gate").classList.remove("on"); $("#topbar").style.display="flex"; $("#nav").style.display="grid"; hienHotline(true); }
+
+/* Nút 📞 Hotline nổi: chỉ hiện khi khách đã vào được app. Tài khoản chủ thì ẩn
+   (chủ không cần gọi chính mình) — giống cách app Sổ Nợ · Bán Hàng đang làm. */
+function hienHotline(hien){
+  const a = document.getElementById("hotlineFab"); if(!a) return;
+  const laChu = (auth.currentUser?.email||"").trim().toLowerCase() === (CFG.adminEmail||"").trim().toLowerCase();
+  if(HOTLINE) a.href = "tel:" + HOTLINE;
+  a.classList.toggle("on", !!hien && !!HOTLINE && !laChu);
+}
+
+function congDangNhap(che){
+  moCong(`
+    <div class="tabs" id="tbAuth"><button class="on" data-m="in">Đăng nhập</button><button data-m="up">Tạo tài khoản</button></div>
+    <div class="f"><label>Email</label><input id="aEmail" type="email" autocomplete="username" placeholder="nhaxe@gmail.com"></div>
+    <div class="f"><label>Mật khẩu</label><input id="aPass" type="password" autocomplete="current-password" placeholder="ít nhất 6 ký tự"></div>
+    <button class="btn pri blk" id="aGo" style="margin-top:6px">Đăng nhập</button>
+    <p class="xs mo" style="text-align:center;margin-top:12px"><span class="act" id="aQuen" style="color:var(--bien);cursor:pointer">Quên mật khẩu</span></p>
+    <p class="xs mo" style="text-align:center;margin-top:26px">Dùng thử ${CFG.thuThu} ngày, đầy đủ tính năng, không cần thẻ.</p>
+    ${che?`<div class="alert" style="margin-top:16px"><span class="ic">!</span><div>${esc(che)}</div></div>`:""}
+    ${DONG_HOTRO}
+  `);
+  let mode="in";
+  $("#tbAuth").onclick = e=>{ const b=e.target.closest("button"); if(!b) return;
+    $$("#tbAuth button").forEach(x=>x.classList.toggle("on", x===b)); mode=b.dataset.m;
+    $("#aGo").textContent = mode==="in" ? "Đăng nhập" : "Tạo tài khoản"; };
+  $("#aQuen").onclick = async ()=>{ const m=$("#aEmail").value.trim(); if(!m) return toast("Nhập email trước đã",1);
+    try{ await sendPasswordResetEmail(auth,m); toast("Đã gửi link đặt lại mật khẩu"); }catch(e){ toast(loi(e),1); } };
+  $("#aGo").onclick = async ()=>{
+    const m=$("#aEmail").value.trim(), p=$("#aPass").value;
+    if(!m||p.length<6) return toast("Thiếu email hoặc mật khẩu quá ngắn",1);
+    $("#aGo").disabled=true; $("#aGo").textContent="Đang xử lý…";
+    try{ mode==="in" ? await signInWithEmailAndPassword(auth,m,p) : await createUserWithEmailAndPassword(auth,m,p); }
+    catch(e){ toast(loi(e),1); $("#aGo").disabled=false; $("#aGo").textContent = mode==="in"?"Đăng nhập":"Tạo tài khoản"; }
+  };
+}
+const loi = e => ({
+  "auth/invalid-credential":"Sai email hoặc mật khẩu",
+  "auth/invalid-email":"Email không hợp lệ",
+  "auth/email-already-in-use":"Email này đã có tài khoản",
+  "auth/weak-password":"Mật khẩu cần từ 6 ký tự",
+  "auth/network-request-failed":"Không có mạng",
+  "auth/too-many-requests":"Thử lại sau ít phút"
+}[e?.code] || "Lỗi: " + (e?.code||e?.message||e));
+
+function congGiaHan(){
+  const l = LIC||{}, con = l.hanDen ? cachNgay(l.hanDen, hnay()) : 9999;
+  const noiDung = ("HD " + (auth.currentUser?.email||"").split("@")[0]).slice(0,45);
+  const qr = m => `https://img.vietqr.io/image/${bkBin()}-${bkSo()}-compact2.png?amount=${giaThang()*m}`
+    + `&addInfo=${encodeURIComponent(noiDung)}&accountName=${encodeURIComponent(bkTen())}`;
+  const coBank = bkBin() && bkSo();
+  moCong(`
+    <div class="card">
+      <div class="kv"><span class="k">Tài khoản</span><span class="v">${esc(auth.currentUser?.email||"")}</span></div>
+      <div class="kv"><span class="k">Gói</span><span class="v">${esc(l.goi||"—")}</span></div>
+      <div class="kv"><span class="k">Hạn dùng</span><span class="v" style="color:${con>=0?'var(--chay)':'var(--canh)'}">${l.hanDen?ngayVN(l.hanDen):"không giới hạn"} ${l.hanDen?(con>=0?`(còn ${con} ngày)`:"(đã hết hạn)"):""}</span></div>
+    </div>
+    <div class="tabs" id="tbGoi">
+      ${CFG.thang.map((m,i)=>`<button class="${i?"":"on"}" data-m="${m}">${m} tháng</button>`).join("")}
+    </div>
+    ${coBank ? `<div class="qr-box"><img id="imgQR" src="${qr(CFG.thang[0])}" alt="Mã VietQR chuyển khoản"></div>` : ""}
+    <div class="card">
+      <div class="kv"><span class="k">Số tiền</span><span class="v num" id="soTien">${tien(giaThang())} đ</span></div>
+      ${coBank ? `
+      <div class="kv"><span class="k">Ngân hàng</span><span class="v">${esc(BILL.bankName||"")}</span></div>
+      <div class="kv"><span class="k">Số tài khoản</span><span class="v copy" data-c="${esc(bkSo())}">${esc(bkSo())}</span></div>
+      <div class="kv"><span class="k">Chủ tài khoản</span><span class="v">${esc(bkTen())}</span></div>
+      <div class="kv"><span class="k">Nội dung bắt buộc</span><span class="v copy" data-c="${esc(noiDung)}">${esc(noiDung)}</span></div>` : `
+      <p class="sm mo" style="margin:6px 0 0">Chủ phần mềm chưa khai số tài khoản nhận tiền. Bấm nút bên dưới để báo, bên mình sẽ liên hệ lại.</p>`}
+    </div>
+    ${coBank?`<p class="xs mo" style="margin:10px 0 14px">Chuyển đúng nội dung ở trên để bên mình đối soát. Sau khi chuyển, bấm nút báo bên dưới — tài khoản được mở lại trong ngày.</p>`:""}
+    <button class="btn pri blk" id="baoCK">${coBank?"Tôi đã chuyển khoản":"Gửi yêu cầu gia hạn"}</button>
+    <button class="btn blk" id="ktLai" style="margin-top:8px">Kiểm tra lại / quay lại ứng dụng</button>
+    <button class="btn blk dan" id="raNgoai" style="margin-top:8px">Đăng xuất</button>
+    ${DONG_HOTRO}
+  `);
+  let thang = CFG.thang[0];
+  $("#tbGoi").onclick = e=>{ const b=e.target.closest("button"); if(!b) return;
+    $$("#tbGoi button").forEach(x=>x.classList.toggle("on",x===b)); thang=num(b.dataset.m);
+    if($("#imgQR")) $("#imgQR").src=qr(thang);
+    $("#soTien").textContent = tien(giaThang()*thang)+" đ"; };
+  $$("#gate .copy").forEach(el=>el.onclick=()=>{ navigator.clipboard?.writeText(el.dataset.c); toast("Đã sao chép"); });
+  $("#baoCK").onclick = async ()=>{
+    // Kho renewalRequests dùng chung với 4 app cũ. Id "{uid}__hd" để đơn của
+    // app này không ghi đè đơn của app khác cùng một khách.
+    try{ await setDoc(doc(fdb,"renewalRequests", UID+"__"+CFG.app), {
+          uid:UID, app:CFG.app, email:auth.currentUser?.email||"",
+          months:thang, amount:giaThang()*thang, noiDung,
+          status:"pending", requestedAt:new Date() }, {merge:true});
+      toast("Đã gửi. Bên mình đối soát và mở lại trong ngày.");
+    }catch(e){ toast("Chưa gửi được — kiểm tra mạng rồi thử lại",1); }
+  };
+  $("#ktLai").onclick = async ()=>{
+    try{ LIC = await docGiayPhep(); }catch(e){ return toast("Cần có mạng để kiểm tra lại",1); }
+    conHan(LIC) ? khoiDong() : toast("Hạn dùng chưa được cập nhật",1);
+  };
+  $("#raNgoai").onclick = ()=> signOut(auth);
+}
+
+/* ------------------------------ KHỞI ĐỘNG ------------------------------ */
+const CHIA = new URLSearchParams(location.search).get("ct");   // link tra cứu của tài xế
+onAuthStateChanged(auth, async u=>{
+  if(CHIA) return;
+  if(!u){ UID=null; $("#topbar").style.display="none"; $("#nav").style.display="none"; return congDangNhap(); }
+  UID = u.uid;
+  moCong(`<p class="mo" style="text-align:center;padding:40px 0">Đang tải dữ liệu…</p>`);
+  try{
+    await napBilling();
+    LIC = await docGiayPhep();
+    if(!conHan(LIC)) return congGiaHan();
+    await STORE.nap();
+    khoiDong();
+  }catch(e){
+    console.error(e);
+    if(!navigator.onLine) return congNgoaiTuyen();
+    congDangNhap("Không tải được dữ liệu: " + (e.message||e));
+  }
+});
+
+/* Máy chưa từng tải dữ liệu lần nào mà đã mất mạng — nói thẳng thay vì đá về màn hình đăng nhập. */
+function congNgoaiTuyen(){
+  moCong(`
+    <div class="card"><p class="mo" style="margin:0">Máy này chưa có bản dữ liệu nào để mở khi ngoại tuyến.
+    Nối mạng và mở app một lần, sau đó dùng offline thoải mái.</p></div>
+    <button class="btn pri blk" id="thuLai" style="margin-top:12px">Thử lại</button>
+    <button class="btn blk dan" id="raNgoai2" style="margin-top:8px">Đăng xuất</button>
+    ${DONG_HOTRO}
+  `);
+  $("#thuLai").onclick   = ()=> location.reload();
+  $("#raNgoai2").onclick = ()=> signOut(auth);
+}
+
+/* =================== TIỆN ÍCH GIAO DIỆN =================== */
+function moSheet(t, b, f){ $("#shT").textContent=t; $("#shB").innerHTML=b; $("#shF").innerHTML=f||"";
+  $("#mask").classList.add("on"); $("#sheet").classList.add("on"); }
+function dongSheet(){ $("#mask").classList.remove("on"); $("#sheet").classList.remove("on"); }
+$("#mask").onclick = dongSheet; $("#shX").onclick = dongSheet;
+const val = id => ($("#"+id)?.value ?? "").trim();
+const tenXe = id => DB.xe.find(x=>x.id===id)?.bienSo || "";
+const tenTX = id => DB.tx.find(x=>x.id===id)?.ten || "—";
+const tenKH = id => DB.kh.find(x=>x.id===id)?.ten || "—";
+const bien = (b,c)=> b ? `<span class="plate ${c||''}">${esc(b)}</span>` : `<span class="chip">chưa gán xe</span>`;
+const TT = { kh:["Đã lên lịch","run"], chay:["Đang chạy","warn"], xong:["Hoàn thành","ok"], huy:["Đã hủy",""] };
+const LOAI_HD = {chuyen:"Thuê chuyến", thang:"Hợp đồng tháng", dua:"Đưa đón CB-CNV / học sinh", dulich:"Du lịch", cuoi:"Đám cưới", tang:"Đám tang"};
+const opt = (o,v)=> Object.entries(o).map(([k,t])=>`<option value="${k}"${k===v?" selected":""}>${esc(t)}</option>`).join("");
+const optDS = (ds,v,f)=> `<option value="">— chọn —</option>` + ds.map(o=>`<option value="${o.id}"${o.id===v?" selected":""}>${esc(f(o))}</option>`).join("");
+
+/* =================== CẢNH BÁO GIẤY TỜ =================== */
+function hetHan(){
+  const r=[], h=hnay();
+  DB.xe.filter(x=>!x.ngung).forEach(x=>[["dangKiem","đăng kiểm"],["baoHiem","bảo hiểm"],["phuHieu","phù hiệu XE HỢP ĐỒNG"]]
+    .forEach(([k,t])=>{ if(x[k]){ const c=cachNgay(x[k],h); if(c<=15) r.push({c, m:`${x.bienSo}: ${t} ${c<0?`đã hết hạn ${-c} ngày`:`còn ${c} ngày`}`}); } }));
+  DB.tx.filter(t=>!t.ngung).forEach(t=>[["hanGPLX","giấy phép lái xe"],["hanSK","giấy khám sức khỏe"]]
+    .forEach(([k,n])=>{ if(t[k]){ const c=cachNgay(t[k],h); if(c<=15) r.push({c, m:`${t.ten}: ${n} ${c<0?`đã hết hạn ${-c} ngày`:`còn ${c} ngày`}`}); } }));
+  return r.sort((a,b)=>a.c-b.c);
+}
+function veCanhBao(){
+  const ds = hetHan(), n = ds.filter(x=>x.c<0).length;
+  $("#canhBao").innerHTML = !ds.length ? "" :
+    `<div class="alert ${n?'':'warn'}"><span class="ic">${n?'⛔':'⚠️'}</span><div><b>${n?`${n} giấy tờ đã hết hạn`:"Giấy tờ sắp hết hạn"}</b>
+      ${ds.slice(0,4).map(x=>`<div class="sm">${esc(x.m)}</div>`).join("")}
+      ${ds.length>4?`<div class="xs mo">…và ${ds.length-4} mục khác</div>`:""}</div></div>`;
+  const b = $('.nav button[data-v="xe"]'); b.querySelector(".badge")?.remove();
+  if(n) b.insertAdjacentHTML("beforeend", `<span class="badge">${n}</span>`);
+}
+
+/* =================== 1. LỊCH ĐIỀU XE =================== */
+let mocLich = 0;
+function trungLich(c){
+  if(!c.xeId || c.trangThai==="huy") return false;
+  return DB.chuyen.some(k=> k.id!==c.id && k.xeId===c.xeId && k.trangThai!=="huy"
+      && dt(k.batDau) < dt(c.ketThuc||c.batDau) && dt(c.batDau) < dt(k.ketThuc||k.batDau));
+}
+function veLich(){
+  const d0 = new Date(); d0.setDate(d0.getDate()+mocLich*7); d0.setHours(0,0,0,0);
+  const ngay = [...Array(7)].map((_,i)=>{ const d=new Date(d0); d.setDate(d.getDate()+i); return d.toISOString().slice(0,10); });
+  const xe = DB.xe.filter(x=>!x.ngung);
+  let h = `<div class="lich-head"><div class="fix"><span class="xs mo">${ngayVN(ngay[0]).slice(0,5)} – ${ngayVN(ngay[6]).slice(0,5)}</span></div>`;
+  ngay.forEach(n=>{ const d=dt(n); h+=`<div class="cell${n===hnay()?" today":""}"><b>${d.getDate()}</b>${THU[d.getDay()]}</div>`; });
+  h += `</div>`;
+  if(!xe.length) h += `<div class="empty"><b>Chưa có xe nào</b>Thêm xe ở tab “Xe &amp; TX” để bắt đầu xếp lịch.</div>`;
+  xe.forEach(x=>{
+    h += `<div class="lane"><div class="fix">${bien(x.bienSo,"sm")}<span class="xs mo">${x.soCho||"?"} chỗ</span></div>`;
+    ngay.forEach(n=>{
+      const ds = DB.chuyen.filter(c=>c.xeId===x.id && (c.batDau||"").slice(0,10)===n);
+      h += `<div class="cell">` + ds.map(c=>{
+        const k = c.trangThai==="xong"?"done":c.trangThai==="huy"?"cancel":trungLich(c)?"clash":"";
+        return `<div class="blk ${k}" data-ct="${c.id}"><b>${gioVN(c.batDau)} ${esc(c.diemCuoi||c.lotrinh||"")}</b>${esc(tenTX(c.txId).split(" ").pop())}</div>`;
+      }).join("") + `</div>`;
+    });
+    h += `</div>`;
+  });
+  $("#lichBody").innerHTML = h;
+  $$("#lichBody .blk").forEach(b=>b.onclick=()=>xemChuyenNoiBo(b.dataset.ct));
+}
+function veHomNay(){
+  const ds = DB.chuyen.filter(c=>(c.batDau||"").slice(0,10)===hnay() && c.trangThai!=="huy")
+                      .sort((a,b)=>(a.batDau||"").localeCompare(b.batDau));
+  $("#homNay").innerHTML = ds.length ? ds.map(c=>{
+    const t = TT[c.trangThai]||TT.kh;
+    return `<div class="item" data-ct="${c.id}"><div class="l">
+      <div class="t">${gioVN(c.batDau)} · ${esc(c.diemDau||"")} → ${esc(c.diemCuoi||"")}</div>
+      <div class="d">${esc(tenTX(c.txId))} · ${(c.hanhKhach||[]).length} khách${trungLich(c)?' · <span style="color:var(--canh)">trùng xe</span>':""}</div>
+    </div><div class="r">${bien(tenXe(c.xeId),"sm")}<div style="margin-top:5px"><span class="chip ${t[1]}">${t[0]}</span></div></div></div>`;
+  }).join("") : `<div class="empty"><b>Hôm nay không có chuyến</b>Tạo hợp đồng mới hoặc xếp chuyến từ nút +.</div>`;
+  $$("#homNay .item").forEach(b=>b.onclick=()=>xemChuyenNoiBo(b.dataset.ct));
+}
+
+/* =================== 2. HỢP ĐỒNG =================== */
+function veHD(){
+  const q = ($("#timHD").value||"").toLowerCase();
+  const ds = DB.hopdong.filter(h=> !q || [h.ma,tenKH(h.khId),tenXe(h.xeId),h.diemCuoi].join(" ").toLowerCase().includes(q))
+                       .sort((a,b)=>(b.batDau||"").localeCompare(a.batDau||""));
+  $("#dsHD").innerHTML = ds.length ? ds.map(h=>`
+    <div class="item" data-hd="${h.id}"><div class="l">
+      <div class="t">${esc(h.ma||"HĐ")} · ${esc(tenKH(h.khId))}</div>
+      <div class="d">${ngayVN(h.batDau)} → ${ngayVN(h.ketThuc)} · ${esc(h.diemDau||"")} → ${esc(h.diemCuoi||"")}</div>
+      <div class="d">${esc(LOAI_HD[h.loai]||"")} · ${h.soKhach||0} khách · ${h.cuLy||0} km</div>
+    </div><div class="r"><div class="money">${tien(h.giaTri)}</div>
+      <div style="margin-top:5px">${bien(tenXe(h.xeId),"sm")}</div></div></div>`).join("")
+    : `<div class="empty"><b>Chưa có hợp đồng</b>Bấm + để lập hợp đồng đầu tiên.</div>`;
+  $$("#dsHD .item").forEach(b=>b.onclick=()=>formHD(DB.hopdong.find(x=>x.id===b.dataset.hd)));
+}
+
+function formHD(o){
+  const m = o||{ id:"", ma:"HĐ"+String(DB.hopdong.length+1).padStart(3,"0")+"/"+new Date().getFullYear(),
+                 loai:"chuyen", ngayKy:hnay(), batDau:hnay()+"T06:00", ketThuc:hnay()+"T18:00", diemDon:[] };
+  moSheet(o?"Sửa hợp đồng":"Hợp đồng mới", `
+    <div class="f2">
+      <div class="f"><label>Số hợp đồng <span class="req">*</span></label><input id="hMa" value="${esc(m.ma||"")}"></div>
+      <div class="f"><label>Ngày ký</label><input id="hKy" type="date" value="${m.ngayKy||hnay()}"></div>
+    </div>
+    <div class="f"><label>Loại hợp đồng</label><select id="hLoai">${opt(LOAI_HD,m.loai)}</select></div>
+    <div class="f"><label>Bên thuê vận tải <span class="req">*</span></label>
+      <select id="hKh">${optDS(DB.kh,m.khId,k=>k.ten+(k.sdt?" · "+k.sdt:""))}</select>
+      <div class="hint"><span class="act" id="themKH" style="color:var(--bien);cursor:pointer">+ Thêm khách mới</span></div></div>
+    <div class="f2">
+      <div class="f"><label>Bắt đầu (ngày giờ) <span class="req">*</span></label><input id="hBd" type="datetime-local" value="${m.batDau||""}"></div>
+      <div class="f"><label>Kết thúc <span class="req">*</span></label><input id="hKt" type="datetime-local" value="${m.ketThuc||""}"></div>
+    </div>
+    <div class="f"><label>Điểm đầu <span class="req">*</span></label><input id="hDd" value="${esc(m.diemDau||"")}" placeholder="Số nhà, đường, xã/phường, tỉnh"></div>
+    <div class="f"><label>Điểm cuối <span class="req">*</span></label><input id="hDc" value="${esc(m.diemCuoi||"")}"></div>
+    <div class="f"><label>Các điểm đón, trả khách trên hành trình</label>
+      <textarea id="hDon" placeholder="Mỗi điểm một dòng">${esc((m.diemDon||[]).join("\n"))}</textarea>
+      <div class="hint">Xe hợp đồng chỉ được đón, trả đúng những điểm ghi trong hợp đồng.</div></div>
+    <div class="f2">
+      <div class="f"><label>Cự ly (km)</label><input id="hKm" type="number" inputmode="numeric" value="${m.cuLy||""}"></div>
+      <div class="f"><label>Số hành khách</label><input id="hSk" type="number" inputmode="numeric" value="${m.soKhach||""}"></div>
+    </div>
+    <div class="f"><label>Xe thực hiện</label><select id="hXe">${optDS(DB.xe.filter(x=>!x.ngung),m.xeId,x=>x.bienSo+" · "+(x.soCho||"?")+" chỗ")}</select></div>
+    <div class="f2">
+      <div class="f"><label>Giá trị hợp đồng (đ)</label><input id="hGt" type="number" inputmode="numeric" value="${m.giaTri||""}"></div>
+      <div class="f"><label>Đặt cọc (đ)</label><input id="hCoc" type="number" inputmode="numeric" value="${m.coc||""}"></div>
+    </div>
+    <div class="f"><label>Ghi chú (dịch vụ kèm, cầu đường, ăn nghỉ tài xế…)</label><textarea id="hGc">${esc(m.ghiChu||"")}</textarea></div>
+    ${o?`<div class="alert warn" style="margin-top:6px"><span class="ic">📄</span><div class="sm">Hợp đồng và danh sách hành khách phải lưu tối thiểu 3 năm.</div></div>`:""}
+  `, `
+    ${o?`<button class="btn dan" id="hXoa">Xóa</button><button class="btn" id="hIn">In / PDF</button>`:""}
+    <button class="btn pri" id="hLuu">${o?"Lưu":"Lưu &amp; tạo chuyến"}</button>
+  `);
+  $("#themKH").onclick = ()=>{ const tam = docHD(m);          // giữ lại số liệu đang gõ dở
+    formKH(null, k=>formHD({...tam, khId:k.id})); };
+  $("#hLuu").onclick = ()=>{
+    const d = docHD(m);
+    if(!d.ma||!d.khId||!d.batDau||!d.diemDau||!d.diemCuoi) return toast("Còn thiếu ô có dấu *",1);
+    const moi = !d.id; STORE.luu("hopdong", d);
+    if(moi) STORE.luu("chuyen", { hdId:d.id, xeId:d.xeId, batDau:d.batDau, ketThuc:d.ketThuc,
+        diemDau:d.diemDau, diemCuoi:d.diemCuoi, doanhThu:d.giaTri, trangThai:"kh", hanhKhach:[] });
+    STORE.ghi(); dongSheet(); veTatCa(); toast(moi?"Đã lập hợp đồng và xếp 1 chuyến":"Đã lưu hợp đồng");
+  };
+  if(o){
+    $("#hIn").onclick = ()=>inHopDong(o);
+    $("#hXoa").onclick = ()=>{ if(!confirm("Xóa hợp đồng này? Các chuyến kèm theo vẫn giữ lại.")) return;
+      STORE.xoa("hopdong",o.id); STORE.ghi(); dongSheet(); veTatCa(); };
+  }
+  function docHD(cu){ return { ...cu, id:cu.id||"", ma:val("hMa"), ngayKy:val("hKy"), loai:val("hLoai"), khId:val("hKh"),
+    batDau:val("hBd"), ketThuc:val("hKt"), diemDau:val("hDd"), diemCuoi:val("hDc"),
+    diemDon:val("hDon").split("\n").map(s=>s.trim()).filter(Boolean),
+    cuLy:num(val("hKm")), soKhach:num(val("hSk")), xeId:val("hXe"), giaTri:num(val("hGt")), coc:num(val("hCoc")), ghiChu:val("hGc") }; }
+}
+
+/* =================== 3. CHUYẾN =================== */
+function veChuyen(){
+  const l = $("#locChuyen").value, h = hnay();
+  let ds = DB.chuyen.slice();
+  if(l==="0") ds = ds.filter(c=>(c.batDau||"").slice(0,10)===h);
+  else if(l!=="all"){ const n=num(l); ds = n>=0 ? ds.filter(c=>{const k=cachNgay(c.batDau,h); return k>=0&&k<=n;})
+                                                : ds.filter(c=>{const k=cachNgay(c.batDau,h); return k<0&&k>=n;}); }
+  ds.sort((a,b)=>(a.batDau||"").localeCompare(b.batDau||""));
+  $("#dsChuyen").innerHTML = ds.length ? ds.map(c=>{
+    const t=TT[c.trangThai]||TT.kh, hd=DB.hopdong.find(x=>x.id===c.hdId);
+    return `<div class="item" data-ct="${c.id}"><div class="l">
+      <div class="t">${ngayVN(c.batDau)} ${gioVN(c.batDau)} · ${esc(c.diemDau||"")} → ${esc(c.diemCuoi||"")}</div>
+      <div class="d">${hd?esc(hd.ma)+" · ":""}${esc(tenKH(hd?.khId))}</div>
+      <div class="d">${esc(tenTX(c.txId))} · ${(c.hanhKhach||[]).length} khách${trungLich(c)?' · <span style="color:var(--canh)">trùng xe</span>':""}</div>
+    </div><div class="r">${bien(tenXe(c.xeId),"sm")}<div style="margin-top:5px"><span class="chip ${t[1]}">${t[0]}</span></div></div></div>`;
+  }).join("") : `<div class="empty"><b>Không có chuyến nào</b>Đổi bộ lọc hoặc bấm + để xếp chuyến.</div>`;
+  $$("#dsChuyen .item").forEach(b=>b.onclick=()=>xemChuyenNoiBo(b.dataset.ct));
+}
+
+function xemChuyenNoiBo(id){
+  const c = DB.chuyen.find(x=>x.id===id); if(!c) return;
+  const hd = DB.hopdong.find(x=>x.id===c.hdId), hk=c.hanhKhach||[];
+  const cp = DB.chiphi.filter(x=>x.chuyenId===c.id), tongCP = cp.reduce((s,x)=>s+num(x.soTien),0);
+  moSheet("Chuyến " + ngayVN(c.batDau), `
+    ${trungLich(c)?`<div class="alert"><span class="ic">⛔</span><div><b>Trùng xe</b><span class="sm">Xe ${esc(tenXe(c.xeId))} đã có chuyến khác cùng khung giờ.</span></div></div>`:""}
+    <div class="card">
+      <div class="kv"><span class="k">Hợp đồng</span><span class="v">${hd?esc(hd.ma):"— chuyến lẻ —"}</span></div>
+      <div class="kv"><span class="k">Bên thuê</span><span class="v">${esc(tenKH(hd?.khId))}</span></div>
+      <div class="kv"><span class="k">Hành trình</span><span class="v">${esc(c.diemDau||"")} → ${esc(c.diemCuoi||"")}</span></div>
+      <div class="kv"><span class="k">Thời gian</span><span class="v">${ngayVN(c.batDau)} ${gioVN(c.batDau)} → ${ngayVN(c.ketThuc)} ${gioVN(c.ketThuc)}</span></div>
+      <div class="kv"><span class="k">Xe / tài xế</span><span class="v">${esc(tenXe(c.xeId)||"chưa gán xe")} · ${esc(tenTX(c.txId))}</span></div>
+      <div class="kv"><span class="k">Doanh thu</span><span class="v num">${tien(c.doanhThu)} đ</span></div>
+      <div class="kv"><span class="k">Chi phí</span><span class="v num" style="color:var(--canh)">${tien(tongCP)} đ</span></div>
+    </div>
+    <div class="hd"><h2>Danh sách hành khách (${hk.length})</h2><span class="line"></span><span class="act" id="ctHK">Sửa</span></div>
+    <div class="card">${hk.length? hk.map((k,i)=>`<div class="kv"><span class="k">${i+1}. ${esc(k.ten)}</span><span class="v">${esc(k.sdt||"")}</span></div>`).join("")
+      : `<p class="sm mo" style="margin:0">Chưa nhập. Lái xe phải xuất trình được danh sách hành khách khi bị kiểm tra.</p>`}</div>
+    <div class="hd"><h2>Chi phí chuyến</h2><span class="line"></span><span class="act" id="ctCP">+ Thêm</span></div>
+    <div class="card">${cp.length? cp.map(x=>`<div class="kv"><span class="k">${esc(x.loai)}</span><span class="v num">${tien(x.soTien)} đ</span></div>`).join("")
+      : `<p class="sm mo" style="margin:0">Chưa có chi phí.</p>`}</div>
+    <div class="f" style="margin-top:14px"><label>Trạng thái</label>
+      <select id="ctTT">${opt({kh:"Đã lên lịch",chay:"Đang chạy",xong:"Hoàn thành",huy:"Đã hủy"}, c.trangThai||"kh")}</select></div>
+  `, `<button class="btn" id="ctSua">Sửa</button><button class="btn" id="ctLink">Link tài xế</button><button class="btn pri" id="ctOk">Lưu</button>`);
+  $("#ctHK").onclick  = ()=>formHK(c);
+  $("#ctCP").onclick  = ()=>formChiPhi(c);
+  $("#ctSua").onclick = ()=>formChuyen(c);
+  $("#ctLink").onclick= ()=>taoLinkTaiXe(c);
+  $("#ctOk").onclick  = ()=>{ c.trangThai=val("ctTT"); STORE.luu("chuyen",c); STORE.ghi(); dongSheet(); veTatCa(); };
+}
+
+function formChuyen(o){
+  const m = o||{ batDau:hnay()+"T06:00", ketThuc:hnay()+"T18:00", trangThai:"kh", hanhKhach:[] };
+  moSheet(o?"Sửa chuyến":"Chuyến mới", `
+    <div class="f"><label>Thuộc hợp đồng</label><select id="cHd">${optDS(DB.hopdong,m.hdId,h=>h.ma+" · "+tenKH(h.khId))}</select></div>
+    <div class="f2">
+      <div class="f"><label>Bắt đầu</label><input id="cBd" type="datetime-local" value="${m.batDau||""}"></div>
+      <div class="f"><label>Kết thúc</label><input id="cKt" type="datetime-local" value="${m.ketThuc||""}"></div>
+    </div>
+    <div class="f"><label>Điểm đầu</label><input id="cDd" value="${esc(m.diemDau||"")}"></div>
+    <div class="f"><label>Điểm cuối</label><input id="cDc" value="${esc(m.diemCuoi||"")}"></div>
+    <div class="f"><label>Xe</label><select id="cXe">${optDS(DB.xe.filter(x=>!x.ngung),m.xeId,x=>x.bienSo+" · "+(x.soCho||"?")+" chỗ")}</select></div>
+    <div class="f"><label>Tài xế</label><select id="cTx">${optDS(DB.tx.filter(t=>!t.ngung),m.txId,t=>t.ten)}</select></div>
+    <div class="f2">
+      <div class="f"><label>Doanh thu chuyến (đ)</label><input id="cDt" type="number" inputmode="numeric" value="${m.doanhThu||""}"></div>
+      <div class="f"><label>Số km thực tế</label><input id="cKm" type="number" inputmode="numeric" value="${m.km||""}"></div>
+    </div>
+  `, `${o?`<button class="btn dan" id="cXoa">Xóa</button>`:""}<button class="btn pri" id="cLuu">Lưu</button>`);
+  $("#cLuu").onclick = ()=>{
+    const d = {...m, hdId:val("cHd"), batDau:val("cBd"), ketThuc:val("cKt"), diemDau:val("cDd"), diemCuoi:val("cDc"),
+               xeId:val("cXe"), txId:val("cTx"), doanhThu:num(val("cDt")), km:num(val("cKm"))};
+    STORE.luu("chuyen", d); STORE.ghi(); dongSheet(); veTatCa();
+    if(trungLich(d)) toast("Đã lưu — nhưng xe này bị trùng lịch!", 1);
+  };
+  if(o) $("#cXoa").onclick = ()=>{ if(confirm("Xóa chuyến này?")){ STORE.xoa("chuyen",o.id); STORE.ghi(); dongSheet(); veTatCa(); } };
+}
+
+function formHK(c){
+  const hk = c.hanhKhach||[];
+  moSheet("Danh sách hành khách", `
+    <p class="sm mo">Mỗi dòng: <b>Họ tên, số điện thoại</b>. Danh sách này in kèm hợp đồng và hiện trên link tra cứu của tài xế.</p>
+    <div class="f"><textarea id="hkT" style="min-height:230px" placeholder="Nguyễn Văn A, 0901234567
+Trần Thị B, 0912345678">${esc(hk.map(k=>[k.ten,k.sdt].filter(Boolean).join(", ")).join("\n"))}</textarea></div>
+  `, `<button class="btn" id="hkHuy">Đóng</button><button class="btn pri" id="hkLuu">Lưu danh sách</button>`);
+  $("#hkHuy").onclick = ()=>xemChuyenNoiBo(c.id);
+  $("#hkLuu").onclick = ()=>{
+    c.hanhKhach = val("hkT").split("\n").map(d=>d.trim()).filter(Boolean)
+      .map(d=>{ const p=d.split(","); return { ten:(p[0]||"").trim(), sdt:(p[1]||"").trim() }; });
+    STORE.luu("chuyen",c); STORE.ghi(); xemChuyenNoiBo(c.id); veTatCa(); toast(`Đã lưu ${c.hanhKhach.length} hành khách`);
+  };
+}
+
+function formChiPhi(c){
+  moSheet("Thêm chi phí", `
+    <div class="f"><label>Khoản chi</label><select id="pLoai">${opt({"Dầu / xăng":"Dầu / xăng","Cầu đường, phà":"Cầu đường, phà","Ăn ở tài xế":"Ăn ở tài xế","Bến bãi":"Bến bãi","Rửa xe":"Rửa xe","Sửa chữa":"Sửa chữa","Khác":"Khác"},"Dầu / xăng")}</select></div>
+    <div class="f"><label>Số tiền (đ)</label><input id="pTien" type="number" inputmode="numeric"></div>
+    <div class="f"><label>Ghi chú</label><input id="pGc"></div>
+  `, `<button class="btn" id="pHuy">Đóng</button><button class="btn pri" id="pLuu">Lưu</button>`);
+  $("#pHuy").onclick = ()=>xemChuyenNoiBo(c.id);
+  $("#pLuu").onclick = ()=>{
+    if(!num(val("pTien"))) return toast("Chưa nhập số tiền",1);
+    STORE.luu("chiphi",{ chuyenId:c.id, xeId:c.xeId, loai:val("pLoai"), soTien:num(val("pTien")), ngay:(c.batDau||hnay()).slice(0,10), ghiChu:val("pGc") });
+    STORE.ghi(); xemChuyenNoiBo(c.id); veTatCa();
+  };
+}
+
+/* =================== 4. XE / TÀI XẾ / KHÁCH =================== */
+let tabXe = "xe";
+function veXe(){
+  const h = hnay();
+  const han = (d)=>{ if(!d) return `<span class="chip">chưa nhập</span>`; const c=cachNgay(d,h);
+    return `<span class="chip ${c<0?"bad":c<=15?"warn":"ok"}">${ngayVN(d)}</span>`; };
+  if(tabXe==="xe"){
+    $("#dsXe").innerHTML = DB.xe.length ? DB.xe.map(x=>`
+      <div class="item" data-i="${x.id}"><div class="l">
+        <div class="rowf">${bien(x.bienSo)}<span class="sm mo">${x.soCho||"?"} chỗ · ${esc(x.loai||"")}</span></div>
+        <div class="d" style="margin-top:6px">Đăng kiểm ${han(x.dangKiem)} Bảo hiểm ${han(x.baoHiem)} Phù hiệu ${han(x.phuHieu)}</div>
+      </div></div>`).join("") : `<div class="empty"><b>Chưa có xe</b>Bấm + để khai xe đầu tiên.</div>`;
+    $$("#dsXe .item").forEach(b=>b.onclick=()=>formXe(DB.xe.find(x=>x.id===b.dataset.i)));
+  } else if(tabXe==="tx"){
+    $("#dsXe").innerHTML = DB.tx.length ? DB.tx.map(t=>`
+      <div class="item" data-i="${t.id}"><div class="l">
+        <div class="t">${esc(t.ten)} <span class="chip">${esc(t.hangGPLX||"?")}</span></div>
+        <div class="d">${esc(t.sdt||"")}</div>
+        <div class="d" style="margin-top:4px">GPLX ${han(t.hanGPLX)} Sức khỏe ${han(t.hanSK)}</div>
+      </div></div>`).join("") : `<div class="empty"><b>Chưa có tài xế</b>Bấm + để thêm.</div>`;
+    $$("#dsXe .item").forEach(b=>b.onclick=()=>formTX(DB.tx.find(x=>x.id===b.dataset.i)));
+  } else {
+    $("#dsXe").innerHTML = DB.kh.length ? DB.kh.map(k=>{
+      const no = congNo(k.id);
+      return `<div class="item" data-i="${k.id}"><div class="l">
+        <div class="t">${esc(k.ten)}</div><div class="d">${esc(k.sdt||"")}${k.mst?" · MST "+esc(k.mst):""}</div>
+      </div><div class="r"><div class="money ${no>0?"out":""}">${tien(no)}</div><div class="xs mo">còn nợ</div></div></div>`;
+    }).join("") : `<div class="empty"><b>Chưa có khách hàng</b>Bấm + để thêm bên thuê vận tải.</div>`;
+    $$("#dsXe .item").forEach(b=>b.onclick=()=>formKH(DB.kh.find(x=>x.id===b.dataset.i)));
+  }
+}
+function formXe(o){
+  const m=o||{};
+  moSheet(o?"Sửa xe":"Thêm xe", `
+    <div class="f2">
+      <div class="f"><label>Biển số <span class="req">*</span></label><input id="xBs" value="${esc(m.bienSo||"")}" placeholder="51B-123.45" style="text-transform:uppercase"></div>
+      <div class="f"><label>Số chỗ</label><input id="xSc" type="number" inputmode="numeric" value="${m.soCho||""}"></div>
+    </div>
+    <div class="f2">
+      <div class="f"><label>Loại xe</label><input id="xLoai" value="${esc(m.loai||"")}" placeholder="Limousine, giường nằm…"></div>
+      <div class="f"><label>Định mức dầu (L/100km)</label><input id="xDm" type="number" step="0.1" value="${m.dinhMuc||""}"></div>
+    </div>
+    <div class="hd"><h2>Hạn giấy tờ</h2><span class="line"></span></div>
+    <div class="f"><label>Hạn đăng kiểm</label><input id="xDk" type="date" value="${m.dangKiem||""}"></div>
+    <div class="f"><label>Hạn bảo hiểm</label><input id="xBh" type="date" value="${m.baoHiem||""}"></div>
+    <div class="f"><label>Hạn phù hiệu “XE HỢP ĐỒNG”</label><input id="xPh" type="date" value="${m.phuHieu||""}">
+      <div class="hint">Phù hiệu cấp theo đề nghị của đơn vị: tối thiểu 1 năm, tối đa 7 năm và không quá niên hạn xe.</div></div>
+    <div class="f"><label><input type="checkbox" id="xNg" ${m.ngung?"checked":""} style="width:auto;margin-right:6px">Ngừng khai thác</label></div>
+  `, `${o?`<button class="btn dan" id="xXoa">Xóa</button>`:""}<button class="btn pri" id="xLuu">Lưu</button>`);
+  $("#xLuu").onclick = ()=>{
+    const bs = val("xBs").toUpperCase(); if(!bs) return toast("Chưa nhập biển số",1);
+    STORE.luu("xe", {...m, bienSo:bs, soCho:num(val("xSc")), loai:val("xLoai"), dinhMuc:num(val("xDm")),
+      dangKiem:val("xDk"), baoHiem:val("xBh"), phuHieu:val("xPh"), ngung:$("#xNg").checked});
+    STORE.ghi(); dongSheet(); veTatCa();
+  };
+  if(o) $("#xXoa").onclick=()=>{ if(confirm("Xóa xe này?")){ STORE.xoa("xe",o.id); STORE.ghi(); dongSheet(); veTatCa(); } };
+}
+function formTX(o){
+  const m=o||{};
+  moSheet(o?"Sửa tài xế":"Thêm tài xế", `
+    <div class="f"><label>Họ tên <span class="req">*</span></label><input id="tTen" value="${esc(m.ten||"")}"></div>
+    <div class="f2">
+      <div class="f"><label>Điện thoại</label><input id="tSdt" type="tel" value="${esc(m.sdt||"")}"></div>
+      <div class="f"><label>Số căn cước</label><input id="tCc" inputmode="numeric" value="${esc(m.cccd||"")}"></div>
+    </div>
+    <div class="f2">
+      <div class="f"><label>Hạng GPLX</label><input id="tHang" value="${esc(m.hangGPLX||"")}" placeholder="D2, D, BE…"></div>
+      <div class="f"><label>Hạn GPLX</label><input id="tHan" type="date" value="${m.hanGPLX||""}"></div>
+    </div>
+    <div class="f"><label>Hạn giấy khám sức khỏe</label><input id="tSk" type="date" value="${m.hanSK||""}"></div>
+    <div class="f2">
+      <div class="f"><label>Lương cứng (đ/tháng)</label><input id="tLuong" type="number" inputmode="numeric" value="${m.luong||""}"></div>
+      <div class="f"><label>Hoa hồng (%/chuyến)</label><input id="tHh" type="number" step="0.5" value="${m.hoaHong||""}"></div>
+    </div>
+    <div class="f"><label><input type="checkbox" id="tNg" ${m.ngung?"checked":""} style="width:auto;margin-right:6px">Đã nghỉ việc</label></div>
+  `, `${o?`<button class="btn dan" id="tXoa">Xóa</button>`:""}<button class="btn pri" id="tLuu">Lưu</button>`);
+  $("#tLuu").onclick = ()=>{
+    if(!val("tTen")) return toast("Chưa nhập họ tên",1);
+    STORE.luu("tx", {...m, ten:val("tTen"), sdt:val("tSdt"), cccd:val("tCc"), hangGPLX:val("tHang"),
+      hanGPLX:val("tHan"), hanSK:val("tSk"), luong:num(val("tLuong")), hoaHong:num(val("tHh")), ngung:$("#tNg").checked});
+    STORE.ghi(); dongSheet(); veTatCa();
+  };
+  if(o) $("#tXoa").onclick=()=>{ if(confirm("Xóa tài xế này?")){ STORE.xoa("tx",o.id); STORE.ghi(); dongSheet(); veTatCa(); } };
+}
+function formKH(o, xong){
+  const m=o||{loai:"cn"};
+  moSheet(o?"Sửa khách hàng":"Thêm khách hàng", `
+    <div class="f"><label>Tên cá nhân / công ty <span class="req">*</span></label><input id="kTen" value="${esc(m.ten||"")}"></div>
+    <div class="f"><label>Loại</label><select id="kLoai">${opt({cn:"Cá nhân",ct:"Tổ chức / công ty"},m.loai)}</select></div>
+    <div class="f2">
+      <div class="f"><label>Điện thoại</label><input id="kSdt" type="tel" value="${esc(m.sdt||"")}"></div>
+      <div class="f"><label>Mã số thuế</label><input id="kMst" inputmode="numeric" value="${esc(m.mst||"")}"></div>
+    </div>
+    <div class="f2">
+      <div class="f"><label>Người đại diện ký</label><input id="kDd" value="${esc(m.daiDien||"")}"></div>
+      <div class="f"><label>Số định danh cá nhân</label><input id="kCc" inputmode="numeric" value="${esc(m.cccd||"")}"></div>
+    </div>
+    <div class="f"><label>Địa chỉ</label><input id="kDc" value="${esc(m.diaChi||"")}"></div>
+    <div class="hint" style="color:var(--mo2);font-size:11px">Các ô trên là nội dung tối thiểu của hợp đồng vận tải hành khách.</div>
+  `, `${o?`<button class="btn dan" id="kXoa">Xóa</button>`:""}<button class="btn pri" id="kLuu">Lưu</button>`);
+  $("#kLuu").onclick = ()=>{
+    if(!val("kTen")) return toast("Chưa nhập tên",1);
+    const d = STORE.luu("kh", {...m, ten:val("kTen"), loai:val("kLoai"), sdt:val("kSdt"), mst:val("kMst"),
+      daiDien:val("kDd"), cccd:val("kCc"), diaChi:val("kDc")});
+    STORE.ghi(); veTatCa(); xong ? xong(d) : (dongSheet(), 0);
+  };
+  if(o) $("#kXoa").onclick=()=>{ if(confirm("Xóa khách hàng này?")){ STORE.xoa("kh",o.id); STORE.ghi(); dongSheet(); veTatCa(); } };
+}
+
+/* =================== 5. THU CHI & BÁO CÁO =================== */
+const trongThang = (d,t) => (d||"").slice(0,7)===t;
+function congNo(khId){
+  const hd = DB.hopdong.filter(h=>h.khId===khId && h.trangThai!=="huy").reduce((s,h)=>s+num(h.giaTri),0);
+  const thu = DB.thuchi.filter(t=>t.loai==="thu" && t.khId===khId).reduce((s,t)=>s+num(t.soTien),0);
+  return hd - thu;
+}
+function veTien(){
+  const t = $("#thangBC").value || hnay().slice(0,7);
+  const ct = DB.chuyen.filter(c=>trongThang(c.batDau,t) && c.trangThai!=="huy");
+  const dt_ = ct.reduce((s,c)=>s+num(c.doanhThu),0);
+  const cp = DB.chiphi.filter(x=>trongThang(x.ngay,t)).reduce((s,x)=>s+num(x.soTien),0)
+           + DB.thuchi.filter(x=>x.loai==="chi" && trongThang(x.ngay,t)).reduce((s,x)=>s+num(x.soTien),0);
+  $("#bcTong").innerHTML = `<div class="card"><div class="kv"><span class="k">Số chuyến</span><span class="v num">${ct.length}</span></div>
+    <div class="kv"><span class="k">Doanh thu</span><span class="v num" style="color:var(--chay)">${tien(dt_)} đ</span></div>
+    <div class="kv"><span class="k">Chi phí</span><span class="v num" style="color:var(--canh)">${tien(cp)} đ</span></div>
+    <div class="kv"><span class="k">Còn lại</span><span class="v num" style="color:var(--bien);font-size:17px">${tien(dt_-cp)} đ</span></div></div>`;
+  const rows = DB.xe.map(x=>{
+    const c = ct.filter(k=>k.xeId===x.id);
+    const d = c.reduce((s,k)=>s+num(k.doanhThu),0);
+    const p = DB.chiphi.filter(k=>k.xeId===x.id && trongThang(k.ngay,t)).reduce((s,k)=>s+num(k.soTien),0);
+    return {x,n:c.length,d,p};
+  }).filter(r=>r.n||r.d||r.p).sort((a,b)=>(b.d-b.p)-(a.d-a.p));
+  $("#bcXe").innerHTML = rows.length ? rows.map(r=>`<div class="item" style="cursor:default"><div class="l">
+      <div class="rowf">${bien(r.x.bienSo,"sm")}<span class="xs mo">${r.n} chuyến</span></div>
+      <div class="d">Thu ${tien(r.d)} · Chi ${tien(r.p)}</div></div>
+      <div class="r"><div class="money ${r.d-r.p>=0?"in":"out"}">${tien(r.d-r.p)}</div></div></div>`).join("")
+    : `<div class="empty">Tháng này chưa có số liệu.</div>`;
+  const no = DB.kh.map(k=>({k, n:congNo(k.id)})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
+  $("#bcNo").innerHTML = no.length ? no.map(x=>`<div class="item" style="cursor:default"><div class="l">
+      <div class="t">${esc(x.k.ten)}</div><div class="d">${esc(x.k.sdt||"")}</div></div>
+      <div class="r"><div class="money out">${tien(x.n)}</div></div></div>`).join("")
+    : `<div class="empty">Không có công nợ.</div>`;
+  const pt = DB.thuchi.filter(p=>trongThang(p.ngay,t)).sort((a,b)=>(b.ngay||"").localeCompare(a.ngay||""));
+  $("#dsThuChi").innerHTML = pt.length ? pt.map(p=>`<div class="item" data-p="${p.id}"><div class="l">
+      <div class="t">${esc(p.noiDung||(p.loai==="thu"?"Phiếu thu":"Phiếu chi"))}</div>
+      <div class="d">${ngayVN(p.ngay)}${p.khId?" · "+esc(tenKH(p.khId)):""}</div></div>
+      <div class="r"><div class="money ${p.loai==="thu"?"in":"out"}">${p.loai==="thu"?"+":"−"}${tien(p.soTien)}</div></div></div>`).join("")
+    : `<div class="empty">Chưa có phiếu nào trong tháng.</div>`;
+  $$("#dsThuChi .item").forEach(b=>b.onclick=()=>formThuChi(DB.thuchi.find(x=>x.id===b.dataset.p)));
+}
+function formThuChi(o){
+  const m=o||{loai:"thu", ngay:hnay()};
+  moSheet(o?"Sửa phiếu":"Phiếu thu / chi", `
+    <div class="f"><label>Loại phiếu</label><select id="pL">${opt({thu:"Phiếu thu (khách trả tiền)",chi:"Phiếu chi"},m.loai)}</select></div>
+    <div class="f2">
+      <div class="f"><label>Số tiền (đ)</label><input id="pT" type="number" inputmode="numeric" value="${m.soTien||""}"></div>
+      <div class="f"><label>Ngày</label><input id="pN" type="date" value="${m.ngay||hnay()}"></div>
+    </div>
+    <div class="f"><label>Khách hàng (nếu là tiền hợp đồng)</label><select id="pK">${optDS(DB.kh,m.khId,k=>k.ten)}</select></div>
+    <div class="f"><label>Nội dung</label><input id="pN2" value="${esc(m.noiDung||"")}" placeholder="Thu cọc HĐ001, trả lương tài xế…"></div>
+  `, `${o?`<button class="btn dan" id="pX">Xóa</button>`:""}<button class="btn pri" id="pL2">Lưu</button>`);
+  $("#pL2").onclick = ()=>{
+    if(!num(val("pT"))) return toast("Chưa nhập số tiền",1);
+    STORE.luu("thuchi", {...m, loai:val("pL"), soTien:num(val("pT")), ngay:val("pN"), khId:val("pK"), noiDung:val("pN2")});
+    STORE.ghi(); dongSheet(); veTatCa();
+  };
+  if(o) $("#pX").onclick=()=>{ if(confirm("Xóa phiếu này?")){ STORE.xoa("thuchi",o.id); STORE.ghi(); dongSheet(); veTatCa(); } };
+}
+function formCauHinh(){
+  moSheet("Thông tin đơn vị vận tải", `
+    <p class="sm mo">Những thông tin này in ra đầu mỗi hợp đồng, bắt buộc phải có.</p>
+    <div class="f"><label>Tên đơn vị <span class="req">*</span></label><input id="gTen" value="${esc(CH.ten||"")}"></div>
+    <div class="f"><label>Địa chỉ</label><input id="gDc" value="${esc(CH.diaChi||"")}"></div>
+    <div class="f2">
+      <div class="f"><label>Điện thoại</label><input id="gSdt" type="tel" value="${esc(CH.sdt||"")}"></div>
+      <div class="f"><label>Mã số thuế</label><input id="gMst" inputmode="numeric" value="${esc(CH.mst||"")}"></div>
+    </div>
+    <div class="f2">
+      <div class="f"><label>Người đại diện ký</label><input id="gDd" value="${esc(CH.daiDien||"")}"></div>
+      <div class="f"><label>Số định danh cá nhân</label><input id="gCc" inputmode="numeric" value="${esc(CH.cccd||"")}"></div>
+    </div>
+    <div class="f"><label>Số điện thoại khẩn cấp in trên hợp đồng</label><input id="gKc" type="tel" value="${esc(CH.khanCap||"")}"></div>
+    <div class="f"><label>Giấy phép kinh doanh vận tải số</label><input id="gGp" value="${esc(CH.gpkd||"")}"></div>
+  `, `<button class="btn pri" id="gLuu">Lưu</button>`);
+  $("#gLuu").onclick = ()=>{ CH = {...CH, ten:val("gTen"), diaChi:val("gDc"), sdt:val("gSdt"), mst:val("gMst"),
+      daiDien:val("gDd"), cccd:val("gCc"), khanCap:val("gKc"), gpkd:val("gGp")};
+    STORE.banRuc("cauhinh"); STORE.ghi(); dongSheet(); veTatCa(); };
+}
+
+/* =================== IN HỢP ĐỒNG + DANH SÁCH HÀNH KHÁCH =================== */
+function inHopDong(h){
+  const k = DB.kh.find(x=>x.id===h.khId)||{}, x = DB.xe.find(x=>x.id===h.xeId)||{};
+  const ct = DB.chuyen.filter(c=>c.hdId===h.id);
+  const hk = ct.flatMap(c=>c.hanhKhach||[]);
+  const dong = (a,b)=>`<tr><td style="width:38%">${a}</td><td>${b||""}</td></tr>`;
+  $("#print").innerHTML = `
+  <div class="p-page">
+    <div class="p-h"><div class="qh">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div><div class="dl">Độc lập – Tự do – Hạnh phúc</div></div>
+    <div class="p-t">HỢP ĐỒNG VẬN CHUYỂN HÀNH KHÁCH</div>
+    <div class="p-s">Số: ${esc(h.ma||"")} &nbsp;·&nbsp; Ngày ${ngayVN(h.ngayKy||hnay())}</div>
+    <div class="p-b">
+      <h4>BÊN VẬN CHUYỂN (Bên A)</h4>
+      <table>${dong("Đơn vị kinh doanh vận tải", esc(CH.ten))}${dong("Địa chỉ", esc(CH.diaChi))}
+        ${dong("Điện thoại", esc(CH.sdt))}${dong("Mã số thuế", esc(CH.mst))}
+        ${dong("Người đại diện ký", esc(CH.daiDien))}${dong("Số định danh cá nhân", esc(CH.cccd))}
+        ${CH.gpkd?dong("Giấy phép KDVT số", esc(CH.gpkd)):""}</table>
+      <h4>BÊN THUÊ VẬN TẢI (Bên B)</h4>
+      <table>${dong("Tên hành khách / người thuê", esc(k.ten))}${dong("Số định danh cá nhân", esc(k.cccd))}
+        ${k.mst?dong("Mã số thuế", esc(k.mst)):""}${dong("Địa chỉ", esc(k.diaChi))}${dong("Điện thoại", esc(k.sdt))}</table>
+      <h4>NỘI DUNG THỰC HIỆN HỢP ĐỒNG</h4>
+      <table>
+        ${dong("Thời gian bắt đầu", ngayVN(h.batDau)+" "+gioVN(h.batDau))}
+        ${dong("Thời gian kết thúc", ngayVN(h.ketThuc)+" "+gioVN(h.ketThuc))}
+        ${dong("Địa chỉ điểm đầu", esc(h.diemDau))}
+        ${dong("Địa chỉ điểm cuối", esc(h.diemCuoi))}
+        ${dong("Các điểm đón, trả khách", esc((h.diemDon||[]).join("; ")||"Theo điểm đầu và điểm cuối"))}
+        ${dong("Cự ly hành trình", (h.cuLy||0)+" km")}
+        ${dong("Số lượng hành khách", (h.soKhach||hk.length||0)+" người")}
+        ${dong("Biển kiểm soát xe", esc(x.bienSo))}
+        ${dong("Sức chứa", (x.soCho||"")+" chỗ")}
+        ${dong("Giá trị hợp đồng", tien(h.giaTri)+" đồng")}
+        ${dong("Đặt cọc", tien(h.coc)+" đồng")}
+        ${h.ghiChu?dong("Thỏa thuận khác", esc(h.ghiChu)):""}
+      </table>
+      <p style="margin-top:8px">Hai bên cam kết thực hiện đúng các điều khoản trên. Bên A vận chuyển hành khách đúng hành trình,
+      đúng các điểm đón trả đã ghi trong hợp đồng và bảo đảm các điều kiện an toàn theo quy định của pháp luật.
+      ${CH.khanCap?`Số điện thoại liên hệ khẩn cấp: ${esc(CH.khanCap)}.`:""}</p>
+      <div class="p-sign">
+        <div><b>ĐẠI DIỆN BÊN B</b><span>(ký, ghi rõ họ tên)</span>${esc(k.daiDien||k.ten||"")}</div>
+        <div><b>ĐẠI DIỆN BÊN A</b><span>(ký, đóng dấu)</span>${esc(CH.daiDien||"")}</div>
+      </div>
+    </div>
+  </div>
+  <div class="p-page">
+    <div class="p-t" style="margin-top:0">DANH SÁCH HÀNH KHÁCH</div>
+    <div class="p-s">Kèm theo hợp đồng số ${esc(h.ma||"")} · Xe ${esc(x.bienSo||"")} · ${ngayVN(h.batDau)}</div>
+    <div class="p-b"><table>
+      <tr><th style="width:38px">TT</th><th>Họ và tên</th><th style="width:120px">Điện thoại</th></tr>
+      ${(hk.length?hk:[...Array(Math.max(10,num(h.soKhach)))].map(()=>({}))).map((p,i)=>
+        `<tr><td>${i+1}</td><td>${esc(p.ten||"")}</td><td>${esc(p.sdt||"")}</td></tr>`).join("")}
+    </table>
+    <div class="p-sign"><div></div><div><b>XÁC NHẬN CỦA ĐƠN VỊ VẬN TẢI</b><span>(ký, đóng dấu)</span>${esc(CH.ten||"")}</div></div>
+    </div>
+  </div>`;
+  window.print();
+}
+
+/* =================== LINK TRA CỨU CHO TÀI XẾ =================== */
+async function taoLinkTaiXe(c){
+  const h = DB.hopdong.find(x=>x.id===c.hdId)||{}, k = DB.kh.find(x=>x.id===h.khId)||{}, x = DB.xe.find(x=>x.id===c.xeId)||{};
+  const token = c.share || (nid()+nid());
+  const goi = {
+    dv:{ ten:CH.ten||"", sdt:CH.sdt||"", mst:CH.mst||"", diaChi:CH.diaChi||"", daiDien:CH.daiDien||"", khanCap:CH.khanCap||"" },
+    hd:{ ma:h.ma||"", loai:LOAI_HD[h.loai]||"", ngayKy:h.ngayKy||"", batDau:c.batDau||"", ketThuc:c.ketThuc||"",
+         diemDau:c.diemDau||h.diemDau||"", diemCuoi:c.diemCuoi||h.diemCuoi||"", diemDon:h.diemDon||[],
+         cuLy:h.cuLy||0, soKhach:h.soKhach||(c.hanhKhach||[]).length },
+    ben:{ ten:k.ten||"", cccd:k.cccd||"", diaChi:k.diaChi||"", sdt:k.sdt||"" },
+    xe:{ bienSo:x.bienSo||"", soCho:x.soCho||"" },
+    tx:{ ten:tenTX(c.txId) },
+    hk:(c.hanhKhach||[]).map(p=>({ten:p.ten||"", sdt:p.sdt||""})),
+    hetHan: themNgay((c.ketThuc||c.batDau||hnay()).slice(0,10), 3),
+    ownerUid: UID
+  };
+  try{
+    await setDoc(doc(fdb,"shares_"+CFG.app, token), goi);
+    if(!c.share){ c.share = token; STORE.luu("chuyen",c); STORE.ghi(true); }
+    const url = location.origin + location.pathname + "?ct=" + token;
+    moSheet("Link tra cứu cho tài xế", `
+      <p class="sm mo">Gửi link này cho tài xế qua Zalo. Mở được trên điện thoại, không cần đăng nhập —
+      dùng để xuất trình hợp đồng và danh sách hành khách khi bị kiểm tra.</p>
+      <div class="f"><input id="lk" value="${esc(url)}" readonly></div>
+      <p class="xs mo">Link tự hết hiệu lực sau ngày ${ngayVN(goi.hetHan)}. Bấm lại nút này sau khi sửa danh sách hành khách để cập nhật.</p>
+    `, `<button class="btn" id="lkMo">Mở thử</button><button class="btn pri" id="lkCopy">Sao chép link</button>`);
+    $("#lkCopy").onclick = ()=>{ navigator.clipboard?.writeText(url); toast("Đã sao chép — dán vào Zalo cho tài xế"); };
+    $("#lkMo").onclick = ()=> window.open(url,"_blank");
+  }catch(e){ console.error(e); toast("Chưa tạo được link — kiểm tra quy tắc Firestore",1); }
+}
+
+async function xemLinkChiaSe(token){
+  document.body.innerHTML = `<div class="gate-in" id="xm"><p class="mo" style="text-align:center;padding:40px 0">Đang mở hợp đồng…</p></div>`;
+  try{
+    const s = await getDoc(doc(fdb,"shares_"+CFG.app, token));
+    if(!s.exists()) throw 0;
+    const g = s.data();
+    const het = cachNgay(g.hetHan, hnay()) < 0;
+    const kv = (a,b)=>`<div class="kv"><span class="k">${a}</span><span class="v">${esc(b||"—")}</span></div>`;
+    $("#xm").innerHTML = `
+      <div class="gate-logo"><span class="plate lg">${esc(g.xe.bienSo)}</span>
+        <p>${esc(g.hd.loai||"Hợp đồng vận chuyển")}</p></div>
+      ${het?`<div class="alert"><span class="ic">⛔</span><div><b>Link đã hết hiệu lực</b><span class="sm">Liên hệ nhà xe để lấy link mới.</span></div></div>`:""}
+      <div class="card">
+        ${kv("Đơn vị vận tải", g.dv.ten)}${kv("Mã số thuế", g.dv.mst)}${kv("Điện thoại", g.dv.sdt)}
+        ${kv("Số hợp đồng", g.hd.ma)}${kv("Ngày ký", ngayVN(g.hd.ngayKy))}
+      </div>
+      <div class="hd"><h2>Bên thuê vận tải</h2><span class="line"></span></div>
+      <div class="card">${kv("Tên", g.ben.ten)}${kv("Số định danh", g.ben.cccd)}${kv("Điện thoại", g.ben.sdt)}${kv("Địa chỉ", g.ben.diaChi)}</div>
+      <div class="hd"><h2>Hành trình</h2><span class="line"></span></div>
+      <div class="card">
+        ${kv("Bắt đầu", ngayVN(g.hd.batDau)+" "+gioVN(g.hd.batDau))}${kv("Kết thúc", ngayVN(g.hd.ketThuc)+" "+gioVN(g.hd.ketThuc))}
+        ${kv("Điểm đầu", g.hd.diemDau)}${kv("Điểm cuối", g.hd.diemCuoi)}
+        ${kv("Điểm đón, trả", (g.hd.diemDon||[]).join("; "))}
+        ${kv("Cự ly", (g.hd.cuLy||0)+" km")}${kv("Số hành khách", (g.hd.soKhach||0)+" người")}
+        ${kv("Sức chứa xe", (g.xe.soCho||"")+" chỗ")}${kv("Lái xe", g.tx.ten)}
+      </div>
+      <div class="hd"><h2>Danh sách hành khách (${(g.hk||[]).length})</h2><span class="line"></span></div>
+      <div class="card">${(g.hk||[]).length ? g.hk.map((p,i)=>`<div class="kv"><span class="k">${i+1}. ${esc(p.ten)}</span><span class="v">${esc(p.sdt||"")}</span></div>`).join("")
+        : `<p class="sm mo" style="margin:0">Chưa có danh sách.</p>`}</div>
+      <p class="xs mo" style="text-align:center;margin:18px 0 40px">${esc(g.dv.ten||"")} · ${esc(g.dv.khanCap||g.dv.sdt||"")}</p>`;
+  }catch(e){ $("#xm").innerHTML = `<div class="empty"><b>Không mở được link</b>Link sai hoặc đã bị thu hồi. Liên hệ nhà xe.</div>`; }
+}
+
+/* =================== ĐIỀU PHỐI =================== */
+let viewHT = "lich";
+function moView(v){
+  viewHT = v;
+  $$(".view").forEach(s=>s.classList.toggle("on", s.id==="v-"+v));
+  $$(".nav button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
+  $("#fab").classList.toggle("on", v!=="tien");
+  window.scrollTo(0,0);
+}
+function veTatCa(){ veCanhBao(); veLich(); veHomNay(); veHD(); veChuyen(); veXe(); veTien(); }
+
+function khoiDong(){
+  dongCong();
+  $("#tenDV").firstChild.textContent = CH.ten || "Nhà xe của bạn";
+  const con = LIC.hanDen ? cachNgay(LIC.hanDen, hnay()) : null;
+  $("#hanDung").textContent = con===null ? (LIC.goi||"") : `${LIC.goi||""} · còn ${con} ngày`;
+  if(con!==null && con<=5) $("#hanDung").style.color="var(--canh)";
+  $("#thangBC").value = hnay().slice(0,7);
+  $("#verTxt").textContent = `Xe Hợp Đồng ${CFG.ver} · ${esc(auth.currentUser?.email||"")}`;
+  veTatCa(); moView("lich");
+  if(!CH.ten) setTimeout(formCauHinh, 400);
+}
+
+$("#nav").onclick = e=>{ const b=e.target.closest("button[data-v]"); if(b) moView(b.dataset.v); };
+$("#fab").onclick = ()=>{ if(viewHT==="hd") formHD(null);
+  else if(viewHT==="xe") tabXe==="xe"?formXe(null):tabXe==="tx"?formTX(null):formKH(null);
+  else formChuyen(null); };
+$("#btnSync").onclick = ()=>STORE.ghi();
+$("#lichPrev").onclick = ()=>{ mocLich--; veLich(); };
+$("#lichNext").onclick = ()=>{ mocLich++; veLich(); };
+$("#timHD").oninput = veHD;
+$("#locChuyen").onchange = veChuyen;
+$("#thangBC").onchange = veTien;
+$("#tabXe").onclick = e=>{ const b=e.target.closest("button"); if(!b) return;
+  $$("#tabXe button").forEach(x=>x.classList.toggle("on",x===b)); tabXe=b.dataset.t; veXe(); };
+$("#themThuChi").onclick = ()=>formThuChi(null);
+$("#btnCauHinh").onclick = formCauHinh;
+$("#btnGiaHan").onclick  = congGiaHan;
+$("#btnThoat").onclick   = async ()=>{ if(STORE.ban.size) await STORE.ghi(true); signOut(auth); };
+$("#btnXuat").onclick = ()=>{
+  const b = new Blob([JSON.stringify({DB,CH,ngay:new Date().toISOString()},null,1)],{type:"application/json"});
+  const a = document.createElement("a"); a.href=URL.createObjectURL(b);
+  a.download = `xe-hop-dong-${hnay()}.json`; a.click(); URL.revokeObjectURL(a.href);
+};
+
+if(CHIA) xemLinkChiaSe(CHIA);
+
+/* icon, manifest và service worker đã lo xong ở đầu trang */
+</script>
+</body>
+</html>
