@@ -2614,5 +2614,162 @@ import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, serv
   setTimeout(tick,400);
 })();
 </script>
+<!-- ═══ HIỂN THỊ HẠN DÙNG CHO KHÁCH (thẻ trong màn Hệ thống) ═══ -->
+<script type="module">
+(async () => {
+  if (window.__HANDUNG_READY__) return; window.__HANDUNG_READY__ = true;
+  const MA_APP = 'hd';   // đổi mã app là dùng lại được cho app khác
+
+  /* ---- helper tính ngày khớp CHÍNH XÁC với app gốc (dt/dToS/cachNgay/hnay/ngayVN) ---- */
+  const dToS = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const dt = s => s ? new Date(s.length>10 ? s : s+'T00:00') : null;
+  const cachNgay = (a,b)=> Math.round((dt(a)-dt(b))/864e5);
+  const hnay = () => new Date().toISOString().slice(0,10);
+  const ngayVN = s => s ? s.slice(0,10).split('-').reverse().join('/') : '';
+
+  let LICINFO = null;   // { goi, hanDen:'YYYY-MM-DD'|'', khoa:bool }  hanDen='' = vĩnh viễn
+
+  /* Bản giấy phép app gốc đã lưu trên máy → hiện được hạn cả khi mất mạng */
+  function docLicMay(uid){
+    try{
+      const o = JSON.parse(localStorage.getItem(`${MA_APP}_lic_${uid}`) || 'null');
+      if(!o || !o.l) return null;
+      const l = o.l;
+      return { goi: l.goi || 'đã thanh toán', hanDen: l.hanDen || '', khoa: !!l.khoa };
+    }catch(e){ return null; }
+  }
+  function tuDoc(d){
+    if(!d) return null;
+    const khoa = d.active === false;
+    let hanDen = '';
+    if(!(d.vinhVien === true) && d.paidUntil){
+      const u = d.paidUntil.toDate ? d.paidUntil.toDate() : new Date(d.paidUntil);
+      if(!isNaN(u)) hanDen = dToS(u);
+    }
+    const goi = d.goi || (d.trial ? 'dùng thử' : 'đã thanh toán');
+    return { goi, hanDen, khoa };
+  }
+
+  /* ---- nội dung + màu của thẻ ---- */
+  function noiDungThe(){
+    const l = LICINFO; if(!l) return null;
+    let vHtml, hint = 'Bấm để gia hạn', tappable = true;
+    if(l.khoa){
+      vHtml = `<span style="color:var(--canh,#ff4d4f);font-weight:700">Đang tạm khóa</span>`;
+    } else if(!l.hanDen){
+      vHtml = `<span style="color:var(--chay,#3ddc97);font-weight:700">Không giới hạn</span>`;
+      hint = ''; tappable = false;
+    } else {
+      const con = cachNgay(l.hanDen, hnay());   // ĐÚNG BẰNG số ở màn gia hạn
+      const mau = con < 0 ? 'var(--canh,#ff4d4f)' : (con <= 7 ? 'var(--bien,#f5c518)' : 'var(--chay,#3ddc97)');
+      const phu = con < 0 ? `đã hết hạn ${-con} ngày` : (con === 0 ? 'hết hạn hôm nay' : `còn ${con} ngày`);
+      vHtml = `<span style="color:${mau};font-weight:700">${ngayVN(l.hanDen)} <span style="font-size:12px;opacity:.9">(${phu})</span></span>`;
+    }
+    return { vHtml, hint, tappable };
+  }
+
+  function moGiaHan(){
+    if (typeof window.openRenew === 'function') window.openRenew();
+    else if (typeof window.congGiaHan === 'function') window.congGiaHan();
+  }
+
+  /* ---- chèn/nhất quán thẻ vào màn "Hệ thống" (ngay trên nút Gói thuê & gia hạn) ---- */
+  function inThe(){
+    const info = noiDungThe(); if(!info) return;   // chưa có dữ liệu thì chưa chèn
+    const anchor = document.getElementById('btnGiaHan');
+    let card = document.getElementById('handung-card');
+    if(!card){
+      card = document.createElement('div');
+      card.id = 'handung-card';
+      card.style.cssText = 'display:block';
+    }
+    card.className = 'card' + (info.tappable ? ' tap' : '');
+    card.onclick = info.tappable ? moGiaHan : null;
+
+    const html =
+      `<div class="kv" style="border-bottom:none;padding:0">`
+        + `<span class="k">Hạn dùng phần mềm</span>`
+        + `<span class="v">${info.vHtml}</span>`
+      + `</div>`
+      + (info.hint ? `<div style="font-size:11.5px;color:var(--mo,#8b95a5);margin-top:5px;text-align:right">${info.hint} ›</div>` : '');
+    if(card.__html !== html){ card.innerHTML = html; card.__html = html; }
+
+    if(anchor){
+      const box = anchor.closest('.btns') || anchor.parentNode;
+      if(card.parentNode !== box.parentNode || card.nextSibling !== box){
+        box.parentNode.insertBefore(card, box);
+      }
+    } else if(!card.parentNode){
+      const v = document.getElementById('v-tien');
+      if(v) v.insertBefore(card, v.firstChild);
+    }
+  }
+
+  /* ---- nạp giấy phép: dò đúng phiên bản Firebase như băng nhắc gia hạn ---- */
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  try {
+    const bases = ['10.12.0','10.12.5'].map(v => `https://www.gstatic.com/firebasejs/${v}`);
+    const fas = await Promise.all(bases.map(b => import(`${b}/firebase-app.js`)));
+    let idx = -1;
+    for (let i = 0; i < 120 && idx < 0; i++){
+      idx = fas.findIndex(fa => fa.getApps().length > 0);
+      if (idx < 0) await sleep(100);
+    }
+    if (idx < 0) return;
+    const base = bases[idx], fa = fas[idx];
+    const { getAuth, onAuthStateChanged } = await import(`${base}/firebase-auth.js`);
+    const { getFirestore, doc, getDoc } = await import(`${base}/firebase-firestore.js`);
+    const auth = getAuth(fa.getApp()), fdb = getFirestore(fa.getApp());
+
+    onAuthStateChanged(auth, async (u) => {
+      if(!u || u.isAnonymous){ LICINFO = null; const c=document.getElementById('handung-card'); if(c) c.remove(); return; }
+      const may = docLicMay(u.uid); if(may){ LICINFO = may; inThe(); }   // hiện ngay từ bản trên máy
+      try{
+        const snap = await getDoc(doc(fdb, `accounts/${u.uid}/lic/${MA_APP}`));
+        if(snap.exists()){ LICINFO = tuDoc(snap.data()); inThe(); }      // cập nhật số liệu mới nhất
+      }catch(e){ /* mất mạng: giữ bản trên máy */ }
+    });
+  } catch (e) {}
+
+  setInterval(inThe, 1000);                              // giữ thẻ + cập nhật "còn N ngày" qua nửa đêm
+  document.addEventListener('DOMContentLoaded', inThe);
+  setTimeout(inThe, 500);
+})();
+</script>
+<!-- ═══ HẾT HIỂN THỊ HẠN DÙNG ═══ -->
+<!-- ═══ PHIÊN BẢN (đọc PHIENBAN từ sw.js — chỉ đổi 1 chỗ khi deploy) ═══ -->
+<script>
+(function(){
+  if (window.__VER_READY__) return; window.__VER_READY__ = true;
+  /* Đọc thẳng PHIENBAN trong sw.js → màn Hệ thống hiện "Phiên bản: <PHIENBAN>".
+     Bạn chỉ đổi PHIENBAN trong sw.js mỗi lần deploy; KHÔNG cần khai số ở đây. */
+  var KHOA = 'hd_build', BUILD = null;
+  try { BUILD = localStorage.getItem(KHOA) || null; } catch(e){}   // hiện ngay bản đã biết (cả khi offline)
+
+  function ve(){
+    var el = document.getElementById('verTxt'); if(!el) return;
+    var txt = 'Phiên bản: ' + (BUILD || '—');
+    if (el.textContent !== txt) el.textContent = txt;
+  }
+  async function docSW(){
+    try{
+      var res = await fetch('sw.js?_=' + Date.now(), { cache:'no-store' });
+      if(!res.ok) return;
+      var t = await res.text();
+      var m = t.match(/PHIENBAN\s*=\s*["']([^"']+)["']/);
+      if(m && m[1]){
+        BUILD = m[1];
+        try{ localStorage.setItem(KHOA, BUILD); }catch(e){}
+        ve();
+      }
+    }catch(e){ /* offline / không đọc được → giữ bản đã biết */ }
+  }
+  document.addEventListener('DOMContentLoaded', function(){ ve(); docSW(); });
+  window.addEventListener('online', docSW);
+  setTimeout(function(){ ve(); docSW(); }, 600);
+  setInterval(ve, 2000);
+})();
+</script>
+<!-- ═══ HẾT PHIÊN BẢN ═══ -->
 </body>
 </html>
