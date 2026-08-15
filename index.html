@@ -424,20 +424,21 @@ button,input,select,textarea{font:inherit;color:inherit}
   <div class="tabs" id="tabXe">
     <button class="on" data-t="xe">Xe</button><button data-t="tx">Tài xế</button><button data-t="kh">Khách hàng</button>
   </div>
+  <div class="hd" style="margin-top:10px"><h2 id="rosterTit" style="font-size:13px">Danh sách</h2><span class="line"></span><span class="act" id="inRoster">🖨️ In</span></div>
   <div class="card" id="dsXe"></div>
 </section>
 
 <!-- 5. THU CHI -->
 <section class="view" id="v-tien">
   <div class="hd"><h2>Kết quả tháng</h2><span class="line"></span>
-    <input type="month" id="thangBC" style="background:var(--than);border:1px solid var(--vach);border-radius:7px;padding:4px 7px;font-size:12px;color:var(--son)">
+    <input type="month" id="thangBC" style="background:var(--than);border:1px solid var(--vach);border-radius:7px;padding:4px 7px;font-size:12px;color:var(--son)"><span class="act" id="inBC" style="margin-left:8px">🖨️ In</span>
   </div>
   <div id="bcTong"></div>
   <div class="hd"><h2>Lãi lỗ theo xe</h2><span class="line"></span></div>
   <div class="card" id="bcXe"></div>
-  <div class="hd"><h2>Công nợ khách</h2><span class="line"></span></div>
+  <div class="hd"><h2>Công nợ khách</h2><span class="line"></span><span class="act" id="inNo">🖨️ In</span></div>
   <div class="card" id="bcNo"></div>
-  <div class="hd"><h2>Sổ thu chi</h2><span class="line"></span><span class="act" id="themThuChi">+ Phiếu</span></div>
+  <div class="hd"><h2>Sổ thu chi</h2><span class="line"></span><span class="act" id="inSo" style="margin-right:10px">🖨️ In</span><span class="act" id="themThuChi">+ Phiếu</span></div>
   <div class="card" id="dsThuChi"></div>
   <div class="hd"><h2>Hệ thống</h2><span class="line"></span></div>
   <div class="btns" style="flex-direction:column">
@@ -1038,7 +1039,7 @@ function formHD(o){
     STORE.ghi(); dongSheet(); veTatCa(); toast(moi?"Đã lập hợp đồng và xếp 1 chuyến":"Đã lưu hợp đồng");
   };
   if(o){
-    $("#hIn").onclick = ()=>inHopDong(o);
+    $("#hIn").onclick = ()=>inDoc({title:"In hợp đồng",key:"hopdong",sizes:["A4","A5"],build:s=>htmlHopDong(o,s)});
     $("#hXoa").onclick = ()=>{ if(!confirm("Xóa hợp đồng này? Các chuyến kèm theo vẫn giữ lại.")) return;
       STORE.xoa("hopdong",o.id); STORE.ghi(); dongSheet(); veTatCa(); };
   }
@@ -1082,7 +1083,7 @@ function xemChuyenNoiBo(id){
       <div class="kv"><span class="k">Doanh thu</span><span class="v num">${tien(c.doanhThu)} đ</span></div>
       <div class="kv"><span class="k">Chi phí</span><span class="v num" style="color:var(--canh)">${tien(tongCP)} đ</span></div>
     </div>
-    <div class="hd"><h2>Danh sách hành khách (${hk.length})</h2><span class="line"></span><span class="act" id="ctHK">Sửa</span></div>
+    <div class="hd"><h2>Danh sách hành khách (${hk.length})</h2><span class="line"></span><span class="act" id="ctIn" style="margin-right:10px">🖨️ In lệnh</span><span class="act" id="ctHK">Sửa</span></div>
     <div class="card">${hk.length? hk.map((k,i)=>`<div class="kv"><span class="k">${i+1}. ${esc(k.ten)}</span><span class="v">${esc(k.sdt||"")}</span></div>`).join("")
       : `<p class="sm mo" style="margin:0">Chưa nhập. Lái xe phải xuất trình được danh sách hành khách khi bị kiểm tra.</p>`}</div>
     <div class="hd"><h2>Chi phí chuyến</h2><span class="line"></span><span class="act" id="ctCP">+ Thêm</span></div>
@@ -1092,6 +1093,7 @@ function xemChuyenNoiBo(id){
       <select id="ctTT">${opt({kh:"Đã lên lịch",chay:"Đang chạy",xong:"Hoàn thành",huy:"Đã hủy"}, c.trangThai||"kh")}</select></div>
   `, `<button class="btn" id="ctSua">Sửa</button><button class="btn" id="ctLink">Link tài xế</button><button class="btn pri" id="ctOk">Lưu</button>`);
   $("#ctHK").onclick  = ()=>formHK(c);
+  $("#ctIn").onclick  = ()=>inDoc({title:"In lệnh vận chuyển",key:"lenh",sizes:["A4","A5"],build:s=>docLenh(c,s)});
   $("#ctCP").onclick  = ()=>formChiPhi(c);
   $("#ctSua").onclick = ()=>formChuyen(c);
   $("#ctLink").onclick= ()=>taoLinkTaiXe(c);
@@ -1183,6 +1185,9 @@ function veXe(){
     }).join("") : `<div class="empty"><b>Chưa có khách hàng</b>Bấm + để thêm bên thuê vận tải.</div>`;
     $$("#dsXe .item").forEach(b=>b.onclick=()=>formKH(DB.kh.find(x=>x.id===b.dataset.i)));
   }
+  const _rt={xe:"Danh sách phương tiện",tx:"Danh sách lái xe",kh:"Danh sách khách hàng"}[tabXe]||"Danh sách";
+  if($("#rosterTit")) $("#rosterTit").textContent=_rt;
+  if($("#inRoster")) $("#inRoster").onclick=()=>inDoc({title:"In "+_rt.toLowerCase(),key:"roster_"+tabXe,sizes:["A4","A5"],build:s=>docRoster(tabXe,s)});
 }
 function formXe(o){
   const m=o||{};
@@ -1302,6 +1307,10 @@ function veTien(){
       <div class="r"><div class="money ${p.loai==="thu"?"in":"out"}">${p.loai==="thu"?"+":"−"}${tien(p.soTien)}</div></div></div>`).join("")
     : `<div class="empty">Chưa có phiếu nào trong tháng.</div>`;
   $$("#dsThuChi .item").forEach(b=>b.onclick=()=>formThuChi(DB.thuchi.find(x=>x.id===b.dataset.p)));
+  const _t=t;
+  if($("#inBC")) $("#inBC").onclick=()=>inDoc({title:"In báo cáo tháng",key:"baocao",sizes:["A4","A5"],build:s=>docBaoCao(_t,s)});
+  if($("#inNo")) $("#inNo").onclick=()=>inDoc({title:"In công nợ khách",key:"congno",sizes:["A4","A5"],build:s=>docCongNo(s)});
+  if($("#inSo")) $("#inSo").onclick=()=>inDoc({title:"In sổ thu chi",key:"sothuchi",sizes:["A4","A5"],build:s=>docSoThuChi(_t,s)});
 }
 function formThuChi(o){
   const m=o||{loai:"thu", ngay:hnay()};
@@ -1313,13 +1322,14 @@ function formThuChi(o){
     </div>
     <div class="f"><label>Khách hàng (nếu là tiền hợp đồng)</label><select id="pK">${optDS(DB.kh,m.khId,k=>k.ten)}</select></div>
     <div class="f"><label>Nội dung</label><input id="pN2" value="${esc(m.noiDung||"")}" placeholder="Thu cọc HĐ001, trả lương tài xế…"></div>
-  `, `${o?`<button class="btn dan" id="pX">Xóa</button>`:""}<button class="btn pri" id="pL2">Lưu</button>`);
+  `, `${o?`<button class="btn dan" id="pX">Xóa</button><button class="btn" id="pIn">🖨️ In</button>`:""}<button class="btn pri" id="pL2">Lưu</button>`);
   $("#pL2").onclick = ()=>{
     if(!num(val("pT"))) return toast("Chưa nhập số tiền",1);
     STORE.luu("thuchi", {...m, loai:val("pL"), soTien:num(val("pT")), ngay:val("pN"), khId:val("pK"), noiDung:val("pN2")});
     STORE.ghi(); dongSheet(); veTatCa();
   };
   if(o) $("#pX").onclick=()=>{ if(confirm("Xóa phiếu này?")){ STORE.xoa("thuchi",o.id); STORE.ghi(); dongSheet(); veTatCa(); } };
+  if(o) $("#pIn").onclick=()=>inDoc({title:"In phiếu thu/chi",key:"phieu",sizes:["A4","A5","K80","K57"],build:s=>docPhieu(m,s)});
 }
 function formCauHinh(){
   moSheet("Thông tin đơn vị vận tải", `
@@ -1399,6 +1409,240 @@ function inHopDong(h){
   </div>`;
   window.print();
 }
+
+/* =================== [THÊM] BỘ DỰNG BẢN IN — đa khổ A4/A5 + bill nhiệt K80/K57 =================== */
+/* Các hàm dựng HTML thuần, đưa cho window.HDPrint() ở cuối trang lo phần chọn khổ + in đa máy in.
+   Không sửa dòng nào của bản in hợp đồng cũ (inHopDong vẫn còn, dùng làm dự phòng). */
+function inDoc(o){ if(window.HDPrint) return window.HDPrint(o); toast("Bộ in đang khởi động, bấm lại giúp mình nhé",1); }
+
+/* Số tiền -> chữ (đồng) */
+function docSo(n){
+  const ch=['không','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
+  function d3(x,full){ const tr=Math.floor(x/100),ch2=Math.floor((x%100)/10),dv=x%10; let s='';
+    if(full) s+=ch[tr]+' trăm'; else if(tr>0) s+=ch[tr]+' trăm';
+    if(ch2===0){ if(dv>0) s+=(s!==''?' lẻ ':'')+ch[dv]; }
+    else if(ch2===1){ s+=(s!==''?' ':'')+'mười'; if(dv===5) s+=' lăm'; else if(dv>0) s+=' '+ch[dv]; }
+    else { s+=(s!==''?' ':'')+ch[ch2]+' mươi'; if(dv===1) s+=' mốt'; else if(dv===5) s+=' lăm'; else if(dv>0) s+=' '+ch[dv]; }
+    return s.trim(); }
+  function uf(i){ if(i===0) return ''; if(i===1) return ' nghìn'; if(i===2) return ' triệu';
+    return ['',' nghìn',' triệu'][i%3]+' tỷ'.repeat(Math.floor(i/3)); }
+  n=Math.round(Math.abs(Number(n)||0)); if(n===0) return 'không đồng';
+  const g=[]; let x=n; while(x>0){ g.push(x%1000); x=Math.floor(x/1000); }
+  const p=[]; for(let i=g.length-1;i>=0;i--){ if(g[i]===0) continue; const lead=(p.length===0); p.push(d3(g[i],!lead)+uf(i)); }
+  return (p.join(' ').replace(/\s+/g,' ').trim())+' đồng';
+}
+function chuHoa(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+function orgHead(){
+  return '<div class="org"><div class="n">'+esc(CH.ten||"ĐƠN VỊ VẬN TẢI")+'</div>'
+    +'<div class="m">'+[CH.diaChi?("Địa chỉ: "+esc(CH.diaChi)):"",CH.sdt?("ĐT: "+esc(CH.sdt)):"",CH.mst?("MST: "+esc(CH.mst)):""].filter(Boolean).join(" · ")+'</div></div>';
+}
+
+/* HỢP ĐỒNG + DANH SÁCH HÀNH KHÁCH (khổ A4/A5) — nội dung y hệt bản in cũ, chỉ thay lớp CSS để đổi khổ được */
+function htmlHopDong(h, size){
+  const k=DB.kh.find(x=>x.id===h.khId)||{}, x=DB.xe.find(x=>x.id===h.xeId)||{};
+  const ct=DB.chuyen.filter(c=>c.hdId===h.id), hk=ct.flatMap(c=>c.hanhKhach||[]);
+  const row=(a,b)=>`<tr><td class="k" style="width:38%">${a}</td><td>${b||""}</td></tr>`;
+  return `<div class="page">
+  <div class="natl"><div class="a">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div><div class="b">Độc lập – Tự do – Hạnh phúc</div></div>
+  <div class="doctitle">HỢP ĐỒNG VẬN CHUYỂN HÀNH KHÁCH</div>
+  <div class="docsub">Số: ${esc(h.ma||"")} · Ngày ${ngayVN(h.ngayKy||hnay())}</div>
+  <div class="sec">BÊN VẬN CHUYỂN (Bên A)</div>
+  <table class="tbl">${row("Đơn vị kinh doanh vận tải",esc(CH.ten))}${row("Địa chỉ",esc(CH.diaChi))}${row("Điện thoại",esc(CH.sdt))}${row("Mã số thuế",esc(CH.mst))}${row("Người đại diện ký",esc(CH.daiDien))}${row("Số định danh cá nhân",esc(CH.cccd))}${CH.gpkd?row("Giấy phép KDVT số",esc(CH.gpkd)):""}</table>
+  <div class="sec">BÊN THUÊ VẬN TẢI (Bên B)</div>
+  <table class="tbl">${row("Tên hành khách / người thuê",esc(k.ten))}${row("Số định danh cá nhân",esc(k.cccd))}${k.mst?row("Mã số thuế",esc(k.mst)):""}${row("Địa chỉ",esc(k.diaChi))}${row("Điện thoại",esc(k.sdt))}</table>
+  <div class="sec">NỘI DUNG THỰC HIỆN HỢP ĐỒNG</div>
+  <table class="tbl">
+    ${row("Thời gian bắt đầu",ngayVN(h.batDau)+" "+gioVN(h.batDau))}
+    ${row("Thời gian kết thúc",ngayVN(h.ketThuc)+" "+gioVN(h.ketThuc))}
+    ${row("Địa chỉ điểm đầu",esc(h.diemDau))}
+    ${row("Địa chỉ điểm cuối",esc(h.diemCuoi))}
+    ${row("Các điểm đón, trả khách",esc((h.diemDon||[]).join("; ")||"Theo điểm đầu và điểm cuối"))}
+    ${row("Cự ly hành trình",(h.cuLy||0)+" km")}
+    ${row("Số lượng hành khách",(h.soKhach||hk.length||0)+" người")}
+    ${row("Biển kiểm soát xe",esc(x.bienSo))}
+    ${row("Sức chứa",(x.soCho||"")+" chỗ")}
+    ${row("Giá trị hợp đồng",tien(h.giaTri)+" đồng")}
+    ${row("Đặt cọc",tien(h.coc)+" đồng")}
+    ${h.ghiChu?row("Thỏa thuận khác",esc(h.ghiChu)):""}
+  </table>
+  <p class="note">Hai bên cam kết thực hiện đúng các điều khoản trên. Bên A vận chuyển hành khách đúng hành trình, đúng các điểm đón trả đã ghi trong hợp đồng và bảo đảm các điều kiện an toàn theo quy định của pháp luật.${CH.khanCap?` Số điện thoại liên hệ khẩn cấp: ${esc(CH.khanCap)}.`:""}</p>
+  <div class="sign"><div><b>ĐẠI DIỆN BÊN B</b><i>(ký, ghi rõ họ tên)</i>${esc(k.daiDien||k.ten||"")}</div><div><b>ĐẠI DIỆN BÊN A</b><i>(ký, đóng dấu)</i>${esc(CH.daiDien||"")}</div></div>
+  </div>
+  <div class="page">
+  <div class="doctitle" style="margin-top:0">DANH SÁCH HÀNH KHÁCH</div>
+  <div class="docsub">Kèm theo hợp đồng số ${esc(h.ma||"")} · Xe ${esc(x.bienSo||"")} · ${ngayVN(h.batDau)}</div>
+  <table class="tbl">
+    <tr><th class="c" style="width:42px">TT</th><th>Họ và tên</th><th style="width:130px">Điện thoại</th></tr>
+    ${(hk.length?hk:[...Array(Math.max(10,num(h.soKhach)))].map(()=>({}))).map((p,i)=>`<tr><td class="c">${i+1}</td><td>${esc(p.ten||"")}</td><td>${esc(p.sdt||"")}</td></tr>`).join("")}
+  </table>
+  <div class="sign"><div></div><div><b>XÁC NHẬN CỦA ĐƠN VỊ VẬN TẢI</b><i>(ký, đóng dấu)</i>${esc(CH.ten||"")}</div></div>
+  </div>`;
+}
+
+/* LỆNH VẬN CHUYỂN (phiếu điều xe + danh sách khách) — A4/A5 */
+function docLenh(c, size){
+  const hd=DB.hopdong.find(x=>x.id===c.hdId)||{}, k=DB.kh.find(x=>x.id===hd.khId)||{}, x=DB.xe.find(x=>x.id===c.xeId)||{}, tx=DB.tx.find(t=>t.id===c.txId)||{};
+  const hk=c.hanhKhach||[];
+  const row=(a,b)=>`<tr><td class="k" style="width:34%">${a}</td><td>${b||""}</td></tr>`;
+  return `${orgHead()}
+  <div class="doctitle">LỆNH VẬN CHUYỂN</div>
+  <div class="docsub">${hd.ma?("Hợp đồng số: "+esc(hd.ma)+" · "):""}Ngày ${ngayVN(c.batDau)}</div>
+  <table class="tbl">
+    ${row("Bên thuê vận tải",esc(k.ten||"— chuyến lẻ —"))}
+    ${k.sdt?row("Điện thoại bên thuê",esc(k.sdt)):""}
+    ${row("Hành trình",esc(c.diemDau||hd.diemDau||"")+" → "+esc(c.diemCuoi||hd.diemCuoi||""))}
+    ${row("Thời gian đi",ngayVN(c.batDau)+" "+gioVN(c.batDau))}
+    ${row("Thời gian về",ngayVN(c.ketThuc)+" "+gioVN(c.ketThuc))}
+    ${row("Biển kiểm soát",esc(x.bienSo||"(chưa gán xe)"))}
+    ${row("Sức chứa",(x.soCho||"")+" chỗ")}
+    ${row("Lái xe",esc(tx.ten||"—")+(tx.sdt?(" · "+esc(tx.sdt)):""))}
+    ${row("Số hành khách",(hk.length||c.soKhach||hd.soKhach||0)+" người")}
+    ${CH.khanCap?row("ĐT khẩn cấp đơn vị",esc(CH.khanCap)):""}
+  </table>
+  <div class="sec">DANH SÁCH HÀNH KHÁCH${hk.length?(" ("+hk.length+")"):""}</div>
+  <table class="tbl">
+    <tr><th class="c" style="width:42px">TT</th><th>Họ và tên</th><th style="width:130px">Điện thoại</th></tr>
+    ${(hk.length?hk:[...Array(Math.max(8,num(c.soKhach||hd.soKhach)))].map(()=>({}))).map((p,i)=>`<tr><td class="c">${i+1}</td><td>${esc(p.ten||"")}</td><td>${esc(p.sdt||"")}</td></tr>`).join("")}
+  </table>
+  <div class="sign"><div><b>LÁI XE</b><i>(ký, ghi rõ họ tên)</i>${esc(tx.ten||"")}</div><div><b>ĐƠN VỊ VẬN TẢI</b><i>(ký, đóng dấu)</i>${esc(CH.daiDien||CH.ten||"")}</div></div>`;
+}
+
+/* PHIẾU THU / PHIẾU CHI — A4/A5 và bill nhiệt K80/K57 */
+function docPhieu(p, size){
+  const k=DB.kh.find(x=>x.id===p.khId)||{};
+  const thu=(p.loai!=="chi"), tt=thu?"PHIẾU THU":"PHIẾU CHI";
+  const so=(thu?"PT":"PC")+String(p.id||"").slice(-4).toUpperCase();
+  const nguoi=thu?"Người nộp tiền":"Người nhận tiền";
+  const amt=tien(p.soTien)+" đ", chuC=chuHoa(docSo(p.soTien));
+  const isTh=(size==="K80"||size==="K57");
+  if(isTh){
+    return `<div class="rc">
+      <div class="ct nm">${esc(CH.ten||"ĐƠN VỊ VẬN TẢI")}</div>
+      ${CH.diaChi?`<div class="ct sm">${esc(CH.diaChi)}</div>`:""}
+      ${CH.sdt?`<div class="ct sm">ĐT: ${esc(CH.sdt)}</div>`:""}
+      <div class="ln"></div>
+      <div class="ti">${tt}</div>
+      <div class="rr"><span>Số phiếu</span><span class="vv">${so}</span></div>
+      <div class="rr"><span>Ngày</span><span class="vv">${ngayVN(p.ngay||hnay())}</span></div>
+      ${k.ten?`<div class="rr"><span>${nguoi}</span><span class="vv">${esc(k.ten)}</span></div>`:""}
+      ${p.noiDung?`<div class="rr"><span>Nội dung</span><span class="vv">${esc(p.noiDung)}</span></div>`:""}
+      <div class="ln"></div>
+      <div class="amt">${amt}</div>
+      <div class="bw">(Bằng chữ: ${chuC})</div>
+      <div class="ln"></div>
+      <div class="ct sm">Cảm ơn quý khách!</div>
+    </div>`;
+  }
+  return `${orgHead()}
+  <div class="doctitle">${tt}</div>
+  <div class="docsub">Số: ${so} · Ngày ${ngayVN(p.ngay||hnay())}</div>
+  <table class="kvs">
+    ${k.ten?`<tr><td class="k">${nguoi}</td><td class="v">${esc(k.ten)}</td></tr>`:""}
+    ${k.diaChi?`<tr><td class="k">Địa chỉ</td><td class="v">${esc(k.diaChi)}</td></tr>`:""}
+    ${p.noiDung?`<tr><td class="k">Lý do ${thu?"nộp":"chi"}</td><td class="v">${esc(p.noiDung)}</td></tr>`:""}
+    <tr><td class="k">Số tiền</td><td class="v big">${amt}</td></tr>
+    <tr><td class="k">Bằng chữ</td><td class="v" style="font-weight:400;font-style:italic">${chuC}</td></tr>
+  </table>
+  <div class="sign">
+    <div><b>${nguoi}</b><i>(ký, ghi rõ họ tên)</i></div>
+    <div><b>Người lập phiếu</b><i>(ký, ghi rõ họ tên)</i></div>
+    <div><b>Thủ quỹ</b><i>(ký, ghi rõ họ tên)</i></div>
+  </div>`;
+}
+
+/* BÁO CÁO KẾT QUẢ THÁNG — A4/A5 (tính lại y hệt màn Thu chi) */
+function docBaoCao(t, size){
+  const [Y,M]=String(t||hnay().slice(0,7)).split("-");
+  const ct=DB.chuyen.filter(c=>trongThang(c.batDau,t)&&c.trangThai!=="huy");
+  const dt_=ct.reduce((s,c)=>s+num(c.doanhThu),0);
+  const cpAll=DB.chiphi.filter(x=>trongThang(x.ngay,t)).reduce((s,x)=>s+num(x.soTien),0)
+    +DB.thuchi.filter(x=>x.loai==="chi"&&trongThang(x.ngay,t)).reduce((s,x)=>s+num(x.soTien),0);
+  const rows=DB.xe.map(x=>{ const c=ct.filter(k=>k.xeId===x.id); const d=c.reduce((s,k)=>s+num(k.doanhThu),0);
+    const pp=DB.chiphi.filter(k=>k.xeId===x.id&&trongThang(k.ngay,t)).reduce((s,k)=>s+num(k.soTien),0);
+    return {x,n:c.length,d,p:pp}; }).filter(r=>r.n||r.d||r.p).sort((a,b)=>(b.d-b.p)-(a.d-a.p));
+  const no=DB.kh.map(k=>({k,n:congNo(k.id)})).filter(z=>z.n>0).sort((a,b)=>b.n-a.n);
+  const tongNo=no.reduce((s,z)=>s+z.n,0);
+  return `${orgHead()}
+  <div class="doctitle">BÁO CÁO KẾT QUẢ KINH DOANH</div>
+  <div class="docsub">Tháng ${M}/${Y}</div>
+  <table class="kvs">
+    <tr><td class="k">Số chuyến thực hiện</td><td class="v">${ct.length}</td></tr>
+    <tr><td class="k">Tổng doanh thu</td><td class="v">${tien(dt_)} đ</td></tr>
+    <tr><td class="k">Tổng chi phí</td><td class="v">${tien(cpAll)} đ</td></tr>
+    <tr><td class="k">Còn lại</td><td class="v big">${tien(dt_-cpAll)} đ</td></tr>
+  </table>
+  <div class="sec">Lãi/lỗ theo xe</div>
+  <table class="tbl">
+    <tr><th class="c" style="width:36px">TT</th><th>Biển số</th><th class="c">Chuyến</th><th class="r">Doanh thu</th><th class="r">Chi phí</th><th class="r">Lãi/lỗ</th></tr>
+    ${rows.length?rows.map((r,i)=>`<tr><td class="c">${i+1}</td><td>${esc(r.x.bienSo||"")}</td><td class="c">${r.n}</td><td class="r">${tien(r.d)}</td><td class="r">${tien(r.p)}</td><td class="r">${tien(r.d-r.p)}</td></tr>`).join(""):`<tr><td colspan="6" class="c muted">Không có số liệu</td></tr>`}
+  </table>
+  <div class="sec">Công nợ khách hàng</div>
+  <table class="tbl">
+    <tr><th class="c" style="width:36px">TT</th><th>Khách hàng</th><th style="width:120px">Điện thoại</th><th class="r">Còn nợ</th></tr>
+    ${no.length?no.map((z,i)=>`<tr><td class="c">${i+1}</td><td>${esc(z.k.ten)}</td><td>${esc(z.k.sdt||"")}</td><td class="r">${tien(z.n)}</td></tr>`).join(""):`<tr><td colspan="4" class="c muted">Không có công nợ</td></tr>`}
+    ${no.length?`<tr><th colspan="3" class="r">Tổng công nợ</th><th class="r">${tien(tongNo)}</th></tr>`:""}
+  </table>
+  <div class="sign"><div><b>NGƯỜI LẬP BÁO CÁO</b><i>(ký, ghi rõ họ tên)</i></div><div><b>GIÁM ĐỐC</b><i>(ký, đóng dấu)</i></div></div>`;
+}
+
+/* BẢNG CÔNG NỢ — A4/A5 */
+function docCongNo(size){
+  const no=DB.kh.map(k=>({k,n:congNo(k.id)})).filter(z=>z.n>0).sort((a,b)=>b.n-a.n);
+  const tong=no.reduce((s,z)=>s+z.n,0);
+  return `${orgHead()}
+  <div class="doctitle">BẢNG CÔNG NỢ KHÁCH HÀNG</div>
+  <div class="docsub">Đến ngày ${ngayVN(hnay())}</div>
+  <table class="tbl">
+    <tr><th class="c" style="width:36px">TT</th><th>Khách hàng</th><th style="width:120px">Điện thoại</th><th>Mã số thuế</th><th class="r">Còn nợ</th></tr>
+    ${no.length?no.map((z,i)=>`<tr><td class="c">${i+1}</td><td>${esc(z.k.ten)}</td><td>${esc(z.k.sdt||"")}</td><td>${esc(z.k.mst||"")}</td><td class="r">${tien(z.n)}</td></tr>`).join(""):`<tr><td colspan="5" class="c muted">Không có công nợ</td></tr>`}
+    ${no.length?`<tr><th colspan="4" class="r">Tổng cộng</th><th class="r">${tien(tong)}</th></tr>`:""}
+  </table>
+  <div class="sign"><div><b>NGƯỜI LẬP</b><i>(ký, ghi rõ họ tên)</i></div><div><b>XÁC NHẬN ĐƠN VỊ</b><i>(ký, đóng dấu)</i></div></div>`;
+}
+
+/* SỔ THU CHI THÁNG — A4/A5 */
+function docSoThuChi(t, size){
+  const [Y,M]=String(t||hnay().slice(0,7)).split("-");
+  const pt=DB.thuchi.filter(p=>trongThang(p.ngay,t)).sort((a,b)=>(a.ngay||"").localeCompare(b.ngay||""));
+  const tThu=pt.filter(p=>p.loai==="thu").reduce((s,p)=>s+num(p.soTien),0);
+  const tChi=pt.filter(p=>p.loai==="chi").reduce((s,p)=>s+num(p.soTien),0);
+  const kh=id=>{ const t=tenKH(id); return t==="—"?"":t; };
+  return `${orgHead()}
+  <div class="doctitle">SỔ THU CHI</div>
+  <div class="docsub">Tháng ${M}/${Y}</div>
+  <table class="tbl">
+    <tr><th class="c" style="width:36px">TT</th><th style="width:80px">Ngày</th><th>Nội dung</th><th>Khách hàng</th><th class="r">Thu</th><th class="r">Chi</th></tr>
+    ${pt.length?pt.map((p,i)=>`<tr><td class="c">${i+1}</td><td>${ngayVN(p.ngay)}</td><td>${esc(p.noiDung||"")}</td><td>${esc(kh(p.khId))}</td><td class="r">${p.loai==="thu"?tien(p.soTien):""}</td><td class="r">${p.loai==="chi"?tien(p.soTien):""}</td></tr>`).join(""):`<tr><td colspan="6" class="c muted">Chưa có phiếu trong tháng</td></tr>`}
+    <tr><th colspan="4" class="r">Tổng cộng</th><th class="r">${tien(tThu)}</th><th class="r">${tien(tChi)}</th></tr>
+  </table>
+  <div class="tot"><span>Chênh lệch (Thu − Chi)</span><span>${tien(tThu-tChi)} đ</span></div>
+  <div class="sign"><div><b>NGƯỜI LẬP</b><i>(ký, ghi rõ họ tên)</i></div><div><b>KẾ TOÁN / GIÁM ĐỐC</b><i>(ký, đóng dấu)</i></div></div>`;
+}
+
+/* DANH SÁCH xe / lái xe / khách — A4/A5 */
+function docRoster(kind, size){
+  const h=hnay(), dv=s=>s?ngayVN(s):"—"; let title,head,body;
+  if(kind==="tx"){
+    title="DANH SÁCH LÁI XE";
+    head=`<tr><th class="c" style="width:36px">TT</th><th>Họ và tên</th><th style="width:110px">Điện thoại</th><th class="c">Hạng GPLX</th><th class="c">Hạn GPLX</th><th class="c">Hạn sức khỏe</th></tr>`;
+    body=DB.tx.length?DB.tx.map((t,i)=>`<tr><td class="c">${i+1}</td><td>${esc(t.ten||"")}</td><td>${esc(t.sdt||"")}</td><td class="c">${esc(t.hangGPLX||"")}</td><td class="c">${dv(t.hanGPLX)}</td><td class="c">${dv(t.hanSK)}</td></tr>`).join(""):`<tr><td colspan="6" class="c muted">Chưa có lái xe</td></tr>`;
+  } else if(kind==="kh"){
+    title="DANH SÁCH KHÁCH HÀNG";
+    const tong=DB.kh.reduce((s,k)=>s+Math.max(0,congNo(k.id)),0);
+    head=`<tr><th class="c" style="width:36px">TT</th><th>Tên khách hàng</th><th style="width:110px">Điện thoại</th><th>Mã số thuế</th><th class="r">Còn nợ</th></tr>`;
+    body=DB.kh.length?DB.kh.map((k,i)=>`<tr><td class="c">${i+1}</td><td>${esc(k.ten||"")}</td><td>${esc(k.sdt||"")}</td><td>${esc(k.mst||"")}</td><td class="r">${tien(Math.max(0,congNo(k.id)))}</td></tr>`).join("")+`<tr><th colspan="4" class="r">Tổng công nợ</th><th class="r">${tien(tong)}</th></tr>`:`<tr><td colspan="5" class="c muted">Chưa có khách hàng</td></tr>`;
+  } else {
+    title="DANH SÁCH PHƯƠNG TIỆN";
+    head=`<tr><th class="c" style="width:36px">TT</th><th>Biển số</th><th class="c">Số chỗ</th><th>Loại xe</th><th class="c">Đăng kiểm</th><th class="c">Bảo hiểm</th><th class="c">Phù hiệu</th></tr>`;
+    body=DB.xe.length?DB.xe.map((x,i)=>`<tr><td class="c">${i+1}</td><td>${esc(x.bienSo||"")}</td><td class="c">${esc(x.soCho||"")}</td><td>${esc(x.loai||"")}</td><td class="c">${dv(x.dangKiem)}</td><td class="c">${dv(x.baoHiem)}</td><td class="c">${dv(x.phuHieu)}</td></tr>`).join(""):`<tr><td colspan="7" class="c muted">Chưa có xe</td></tr>`;
+  }
+  return `${orgHead()}
+  <div class="doctitle">${title}</div>
+  <div class="docsub">Đến ngày ${ngayVN(h)}</div>
+  <table class="tbl">${head}${body}</table>
+  <div class="sign"><div></div><div><b>ĐƠN VỊ VẬN TẢI</b><i>(ký, đóng dấu)</i>${esc(CH.ten||"")}</div></div>`;
+}
+/* =================== HẾT BỘ DỰNG BẢN IN =================== */
 
 /* =================== LINK TRA CỨU CHO TÀI XẾ =================== */
 async function taoLinkTaiXe(c){
@@ -2771,5 +3015,131 @@ import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, serv
 })();
 </script>
 <!-- ═══ HẾT PHIÊN BẢN ═══ -->
+<!-- =================== [THÊM] ENGINE IN ĐA MÁY IN / ĐA KHỔ — cô lập, không đụng app =================== -->
+<script>
+(function(){
+  if(window.__HDPRINT_ENGINE__) return; window.__HDPRINT_ENGINE__=true;
+
+  var SZ={
+    A4 :{label:'A4', page:'@page{size:A4;margin:12mm 12mm}',   root:'font-size:12.5pt', w:'210mm'},
+    A5 :{label:'A5', page:'@page{size:A5;margin:9mm 9mm}',     root:'font-size:11pt',   w:'148mm'},
+    K80:{label:'Bill 80mm', page:'@page{size:80mm auto;margin:3mm 3mm}',   root:'font-size:10pt', w:'80mm', thermal:true},
+    K57:{label:'Bill 57mm', page:'@page{size:58mm auto;margin:2mm 2.5mm}', root:'font-size:9pt',  w:'58mm', thermal:true}
+  };
+
+  var BASE=''
+   +'*{box-sizing:border-box}'
+   +'html,body{margin:0;padding:0;background:#fff;color:#000;font-family:"Times New Roman",Times,serif;line-height:1.42;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+   +'.wrap{padding:0}'
+   +'.page{page-break-after:always}.page:last-child{page-break-after:auto}'
+   +'.natl{text-align:center;margin-bottom:8px}'
+   +'.natl .a{font-weight:700;font-size:1.02em}.natl .b{font-weight:700;border-bottom:1px solid #000;display:inline-block;padding-bottom:2px;margin-top:1px}'
+   +'.org{margin-bottom:6px}.org .n{font-weight:700;text-transform:uppercase;font-size:1.02em}.org .m{font-size:.86em;color:#000}'
+   +'.doctitle{text-align:center;font-weight:700;font-size:1.55em;text-transform:uppercase;margin:10px 0 2px}'
+   +'.docsub{text-align:center;font-size:.9em;margin-bottom:10px;font-style:italic}'
+   +'.sec{font-weight:700;text-transform:uppercase;font-size:.92em;margin:12px 0 5px;border-bottom:1px solid #000;padding-bottom:2px}'
+   +'.tbl{width:100%;border-collapse:collapse;font-size:.94em;margin:2px 0 6px}'
+   +'.tbl td,.tbl th{border:1px solid #000;padding:5px 7px;vertical-align:top;text-align:left}'
+   +'.tbl th{background:#eee;font-weight:700}'
+   +'.tbl td.k,.tbl .k{font-weight:600;width:34%}'
+   +'.kvs{width:100%;border-collapse:collapse;font-size:.96em;margin:4px 0 8px}'
+   +'.kvs td{padding:5px 2px;border-bottom:1px dotted #999;vertical-align:top}'
+   +'.kvs td.k{font-weight:600;width:34%;white-space:nowrap;padding-right:10px}'
+   +'.kvs td.v.big,.big{font-weight:700;font-size:1.12em}'
+   +'.note{font-size:.92em;margin:10px 0;text-align:justify}'
+   +'.muted{color:#666;font-style:italic}'
+   +'.c{text-align:center!important}.r{text-align:right!important}'
+   +'.tot{display:flex;justify-content:space-between;font-weight:700;font-size:1.05em;border-top:1.5px solid #000;margin-top:8px;padding-top:6px}'
+   +'.sign{display:flex;justify-content:space-between;gap:16px;margin-top:26px;text-align:center}'
+   +'.sign>div{flex:1}.sign b{display:block;text-transform:uppercase;font-size:.92em}.sign i{display:block;font-size:.82em;color:#333;font-style:italic;margin-bottom:64px}'
+   +'.rc{font-family:"Segoe UI",system-ui,Arial,sans-serif}'
+   +'.rc .ct{text-align:center}.rc .nm{font-weight:700;font-size:1.06em}.rc .sm{font-size:.9em}'
+   +'.rc .ti{text-align:center;font-weight:700;font-size:1.15em;text-transform:uppercase;margin:5px 0}'
+   +'.rc .ln{border-top:1px dashed #000;margin:6px 0}'
+   +'.rc .rr{display:flex;justify-content:space-between;gap:8px;font-size:.94em;margin:2px 0}'
+   +'.rc .rr .vv{font-weight:600;text-align:right}'
+   +'.rc .amt{text-align:center;font-weight:700;font-size:1.35em;margin:4px 0}'
+   +'.rc .bw{text-align:center;font-style:italic;font-size:.9em}';
+
+  var THERMAL=''
+   +'html,body{font-family:"Segoe UI",system-ui,Arial,sans-serif!important}'
+   +'.doctitle{font-size:1.2em;margin:6px 0 2px}.docsub{font-size:.86em;margin-bottom:6px}'
+   +'.sec{border-bottom:1px dashed #000}'
+   +'.tbl{font-size:.9em}.tbl td,.tbl th{border:0;border-bottom:1px dashed #999;padding:3px 2px}.tbl th{background:none;border-bottom:1px solid #000}'
+   +'.org .n{font-size:1em}.sign{display:none}.note{font-size:.86em}';
+
+  function doPrint(code, body){
+    var s=SZ[code]||SZ.A4;
+    var css=BASE+(s.thermal?THERMAL:'')+s.page+'html,body{'+s.root+'}';
+    var doc='<!doctype html><html lang="vi"><head><meta charset="utf-8">'
+      +'<meta name="viewport" content="width=device-width,initial-scale=1"><title>In</title>'
+      +'<style>'+css+'</style></head><body><div class="wrap'+(s.thermal?' thermal':'')+'">'+body+'</div></body></html>';
+    var old=document.getElementById('hdPrintFrame'); if(old){ try{ old.parentNode.removeChild(old); }catch(e){} }
+    var f=document.createElement('iframe');
+    f.id='hdPrintFrame'; f.setAttribute('aria-hidden','true');
+    f.style.cssText='position:fixed;left:-10000px;top:0;border:0;background:#fff;width:'+s.w+';height:'+(s.thermal?'1600mm':'320mm');
+    var removed=false;
+    function clean(){ if(removed) return; removed=true; setTimeout(function(){ try{ var el=document.getElementById('hdPrintFrame'); if(el) el.parentNode.removeChild(el); }catch(e){} },500); }
+    var fired=false;
+    function fire(){
+      if(fired) return; fired=true;
+      var w=f.contentWindow;
+      try{ w.focus(); }catch(e){}
+      try{ w.onafterprint=clean; }catch(e){}
+      try{ if('matchMedia' in w){ var mm=w.matchMedia('print'); var h=function(ev){ if(!ev.matches) clean(); }; if(mm.addEventListener) mm.addEventListener('change',h); else if(mm.addListener) mm.addListener(h); } }catch(e){}
+      setTimeout(function(){ try{ w.focus(); w.print(); }catch(e){ try{ window.print(); }catch(_){} } }, 160);
+      setTimeout(clean, 60000);
+    }
+    f.onload=fire;
+    document.body.appendChild(f);
+    try{ f.srcdoc=doc; }
+    catch(e){ try{ var d=f.contentWindow.document; d.open(); d.write(doc); d.close(); }catch(_){ } }
+    setTimeout(fire, 1300);
+  }
+
+  function pick(opts, code){
+    try{ localStorage.setItem('hd_insize_'+(opts.key||'doc'), code); }catch(e){}
+    var body='';
+    try{ body=opts.build?opts.build(code):(opts.html||''); }
+    catch(err){ body='<div style="padding:12mm;color:#b00;font-family:sans-serif">Lỗi tạo bản in: '+((err&&err.message)||err)+'</div>'; }
+    doPrint(code, body);
+  }
+
+  function open(opts){
+    var sizes=(opts.sizes&&opts.sizes.length?opts.sizes:['A4','A5']).filter(function(c){return SZ[c];});
+    if(!sizes.length) sizes=['A4'];
+    if(sizes.length===1){ pick(opts, sizes[0]); return; }
+    var last=null; try{ last=localStorage.getItem('hd_insize_'+(opts.key||'doc')); }catch(e){}
+    if(sizes.indexOf(last)<0) last=null;
+    var mask=document.createElement('div'); mask.id='hdPrintMask';
+    mask.style.cssText='position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center';
+    var card=document.createElement('div');
+    card.style.cssText='background:#fff;color:#111;width:100%;max-width:440px;border-radius:16px 16px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.4);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;animation:hdUp .18s ease-out';
+    var rows=sizes.map(function(c){
+      var s=SZ[c], isL=(c===last), th=s.thermal;
+      return '<button data-sz="'+c+'" style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;border:1.5px solid '+(isL?'#12b886':'#e4e4e4')+';background:'+(isL?'#e9fbf3':'#fbfbfb')+';border-radius:13px;padding:13px 14px;margin:9px 0;font-size:15.5px;font-weight:600;color:#111;cursor:pointer;-webkit-tap-highlight-color:transparent">'
+        +'<span style="display:flex;align-items:center;gap:11px"><span style="font-size:20px">'+(th?'🧾':'🖨️')+'</span>'
+        +'<span>'+s.label+'<span style="display:block;font-weight:400;color:#8a8a8a;font-size:12px;margin-top:1px">'+(th?'Máy in nhiệt / in bill':'Máy in giấy A4·A5')+'</span></span></span>'
+        +'<span style="color:#12b886;font-size:12px;font-weight:700;white-space:nowrap">'+(isL?'● gần nhất':'')+'</span></button>';
+    }).join('');
+    card.innerHTML='<div style="width:38px;height:4px;background:#ddd;border-radius:3px;margin:0 auto 12px"></div>'
+      +'<div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">'+(opts.title||'In tài liệu')+'</b>'
+      +'<button id="hdPX" style="border:0;background:#eee;border-radius:50%;width:32px;height:32px;font-size:19px;line-height:1;cursor:pointer;color:#555">×</button></div>'
+      +'<p style="margin:6px 0 8px;font-size:12.5px;color:#666;line-height:1.45">Chọn khổ giấy đúng với máy in đang dùng. Nếu máy tính có nhiều máy in, chọn đúng máy ở hộp thoại in hiện ra ngay sau đó.</p>'+rows;
+    mask.appendChild(card); document.body.appendChild(mask);
+    if(!document.getElementById('hdPrintKf')){ var sty=document.createElement('style'); sty.id='hdPrintKf'; sty.textContent='@keyframes hdUp{from{transform:translateY(100%)}to{transform:translateY(0)}}'; document.head.appendChild(sty); }
+    function close(){ try{ mask.parentNode.removeChild(mask); }catch(e){} }
+    mask.addEventListener('click',function(e){ if(e.target===mask) close(); });
+    card.querySelector('#hdPX').onclick=close;
+    Array.prototype.forEach.call(card.querySelectorAll('button[data-sz]'),function(b){
+      b.onclick=function(){ var c=b.getAttribute('data-sz'); close(); pick(opts, c); };
+    });
+  }
+
+  window.HDPrint=function(opts){ try{ open(opts||{}); }catch(e){ try{ pick(opts||{}, 'A4'); }catch(_){} } };
+})();
+</script>
+<!-- =================== HẾT ENGINE IN =================== -->
+
 </body>
 </html>
