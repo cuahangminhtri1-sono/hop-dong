@@ -2150,7 +2150,16 @@ const FB = { apiKey:"AIzaSyA_kjQ-CdASRkf50Glz3kQajlkD5qGWC4k", authDomain:"so-no
 if (!window.__ERR_LOG__) {
   window.__ERR_LOG__ = true;
   let db = null;
-  try { const a = getApps().some(x => x.name === "errlog") ? getApp("errlog") : initializeApp(FB, "errlog"); db = getFirestore(a); } catch (_) {}
+  /* Rules yêu cầu request.auth != null khi ghi error_logs (chặn kẻ lạ đốt quota ghi).
+     Nhưng instance riêng tên "errlog" thì KHÔNG BAO GIỜ đăng nhập -> mọi log đều bị chối.
+     Nên ưu tiên DÙNG LẠI app CHÍNH (cùng projectId) vì nó đã mang sẵn phiên đăng nhập
+     -> request.auth có thật, log ghi được bình thường.
+     Không tìm thấy app cùng project thì mới tạo instance riêng như cũ (đường lùi). */
+  try {
+    const chung = getApps().find(x => ((x.options || {}).projectId) === FB.projectId);
+    const a = chung || (getApps().some(x => x.name === "errlog") ? getApp("errlog") : initializeApp(FB, "errlog"));
+    db = getFirestore(a);
+  } catch (_) {}
   const seen = new Set(); let sent = 0; const MAX = 25;
   const cut = (s, n) => String(s == null ? "" : s).slice(0, n);
   function send(type, d) {
