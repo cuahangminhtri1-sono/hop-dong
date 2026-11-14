@@ -501,7 +501,7 @@ const CFG = {
   thuThu:15,            // bằng TRIAL_DAYS của các app cũ
   giaMac:200000,        // chỉ dùng khi billing/info chưa đặt priceHd
   thang:[1,3,12],
-  app:"hd", ver:"1.0.0"
+  app:"hd", ver:"1.0.1"
 };
 
 /* Số hỗ trợ — dùng lại ở nút nổi 📞 Hotline và ở các màn hình cổng. */
@@ -617,6 +617,7 @@ const STORE = {
       /* Mất mạng mà bộ đệm Firestore trống thì getDocs trả về RỖNG chứ không báo lỗi.
          Không chặn ở đây là app ghi đè bản sao trên máy bằng dữ liệu rỗng — mất sạch. */
       if(tuCache && tong === 0 && banSao) throw new Error("cache-rong");
+      if(tuCache && tong === 0) throw new Error("bv4-chua-co-du-lieu");   /* [BV4] máy chưa từng tải dữ liệu + mạng rớt: không mở trắng trơn */
       COLS.forEach((c,i)=>{ DB[c] = rs[i].docs.map(d=>({id:d.id, ...d.data()})); });
       try{
         const cd = await getDoc(doc(fdb, duong("cauhinh"), "main"));
@@ -627,6 +628,7 @@ const STORE = {
       if(tuCache) toast("Đang dùng dữ liệu lưu trên máy — chưa có mạng");
       return true;
     }catch(e){
+      if(e && e.code === "permission-denied") throw e;   /* [BV4] máy chủ CHỐI (hết hạn / bị khoá / giờ máy sai) ⇒ KHÔNG mở bằng bản lưu trên máy */
       if(banSao){
         COLS.forEach(k=>DB[k] = banSao.DB[k] || []); CH = banSao.CH || {};
         chup(); XOA={}; this.ban.clear();
@@ -654,6 +656,7 @@ const STORE = {
 
   async ghi(im){                   // ghi thật xuống Firestore
     if(this.dangGhi || !UID) return;
+    if(SH.__ch === undefined) return;   /* [BV4] chưa nạp dữ liệu lần nào (ảnh chụp trống) ⇒ KHÔNG ghi gì, tránh ghi đè cấu hình nhà xe bằng {} */
     const viec = [];                                   // gom việc cần ghi
     for(const c of COLS){
       for(const o of DB[c]){ const j=JSON.stringify(o); if(SH[c]?.[o.id]!==j) viec.push(["set",duong(c),o.id,o]); }
@@ -681,12 +684,14 @@ const STORE = {
       /* Mất mạng thì commit() KHÔNG BAO GIỜ resolve — Firestore chỉ báo xong khi máy chủ nhận.
          Chờ mãi là nút kẹt "Đang lưu…" vĩnh viễn và mọi lần lưu sau đều bị chặn.
          Ghi đã nằm trong hàng đợi của Firestore rồi nên chỉ cần chờ có hạn. */
+      let _bv4Loi = null;   /* [BV4] */
       const xong = await Promise.race([
-        Promise.all(lo).then(()=>true, ()=>false),
+        Promise.all(lo).then(()=>true, (e)=>{ _bv4Loi = e; return false; }),
         new Promise(r=>setTimeout(()=>r(null), 6000))
       ]);
       if(xong === false){                              // máy chủ từ chối: GIỮ NGUYÊN cờ để còn thử lại
         toast("Máy chủ từ chối ghi — kiểm tra hạn dùng rồi thử lại", 1);
+        if(_bv4Loi && _bv4Loi.code === "permission-denied") bv4BiChoi();   /* [BV4] hết hạn · bị khoá · giờ máy sai ⇒ màn khoá đúng lý do */
         return;
       }
       SH = anh;
@@ -695,7 +700,7 @@ const STORE = {
       if(xong === true){ this.cho = false; if(!im) toast("Đã lưu " + n + " thay đổi"); }
       else{                                            // hết giờ chờ = đang ngoại tuyến
         this.cho = true;
-        Promise.all(lo).then(()=>{ this.cho = false; capNhatNutLuu(); }, ()=>{});
+        Promise.all(lo).then(()=>{ this.cho = false; capNhatNutLuu(); }, (e)=>{ if(e && e.code === "permission-denied") bv4BiChoi(); });   /* [BV4] */
         if(!im) toast("Đã lưu vào máy — tự gửi lên khi có mạng");
       }
     }catch(e){ toast("Chưa lưu được — sẽ thử lại khi có mạng", 1); console.error(e); }
@@ -734,33 +739,93 @@ async function docGiayPhep(){
   try{ s = await getDoc(r); }
   catch(e){
     // Mất mạng và doc chưa nằm trong bộ đệm thì getDoc BÁO LỖI chứ không trả rỗng.
-    const b = docLicMay(); if(b) return b;
+    const b = docLicMay(); if(b) return bv4GacHd(b, null);   /* [BV4] gác ngoại tuyến */
     throw e;
   }
   if(s.exists()){
     const d = s.data();
     const l = { ...d, khoa: d.active === false,
              goi: d.goi || (d.trial ? "dùng thử" : "đã thanh toán"),
-             hanDen: chuanNgay(d.paidUntil) };        // không có paidUntil = vĩnh viễn
+             hanDen: d.vinhVien === true ? "" : chuanNgay(d.paidUntil),        // [BV4] vĩnh viễn = vinhVien:true (bỏ qua ngày ghi kèm)
+             vv: d.vinhVien === true, nohan: d.vinhVien !== true && !d.paidUntil,   /* [BV4] không ngày + không vinhVien: máy chủ CHẶN */
+             hanMs: (window.BV4 && d.vinhVien !== true) ? window.BV4.msHan(d.paidUntil) : 0 };
     ghiLicMay(l);
-    return l;
+    return bv4GacHd(l, s);   /* [BV4] gác ngoại tuyến */
   }
   /* Chưa có giấy phép mà đang ngoại tuyến: setDoc sẽ treo mãi vì Firestore chờ máy chủ.
      Dừng sớm để app báo rõ thay vì đứng ở màn hình "Đang tải dữ liệu…". */
   if(!navigator.onLine || (s.metadata && s.metadata.fromCache)){
-    const b = docLicMay(); if(b) return b;
+    const b = docLicMay(); if(b) return bv4GacHd(b, null);   /* [BV4] gác ngoại tuyến */
     throw new Error("chua-co-giay-phep-offline");
   }
   // Tài khoản mới: tự cấp bản dùng thử, đúng khuôn quy tắc đang chạy
   // (trial + trialUsed + paidUntil kiểu timestamp, dưới 16 ngày, tạo đúng 1 lần).
+  const _bv4Kt = window.BV4 ? await window.BV4.giuKhoa(bv4Ctx()) : "";   /* [BV4] giữ khoá hộp thư trước (Rules VÁ LỖ Z7) */
   const d0 = new Date(); d0.setDate(d0.getDate() + CFG.thuThu); d0.setHours(23,59,0,0);
-  await setDoc(r, { trial:true, trialUsed:true, active:true, paidUntil:d0, startedAt:new Date() });
+  try{ await setDoc(r, { trial:true, trialUsed:true, active:true, paidUntil:d0, startedAt:new Date() }); }
+  catch(e){ if(window.BV4){ try{ window.BV4.baoThuLoi(bv4Ctx(), _bv4Kt); }catch(_){} } return { app:CFG.app, goi:"chưa mở được dùng thử", thuLoi:_bv4Kt||"loi", nohan:true, hanDen:"" }; }   /* [BV4] */
   try{ await setDoc(doc(fdb,"accounts",UID), { email:auth.currentUser?.email||"", createdAt:new Date() }); }catch(e){}
-  const l0 = { app:CFG.app, goi:"dùng thử", hanDen: dToS(d0) };
+  const l0 = { app:CFG.app, goi:"dùng thử", hanDen: dToS(d0), hanMs: d0.getTime() };   /* [BV4] hanMs: giờ hết hạn chính xác */
   ghiLicMay(l0);
   return l0;
 }
-const conHan = l => !!l && !l.khoa && (!l.hanDen || cachNgay(l.hanDen, hnay()) >= 0);
+const conHan = l => !!l && !l.khoa && !l.canmang && !l.nohan && (l.vv === true || !l.hanDen || cachNgay(l.hanDen, hnay()) >= 0);   /* [BV4] vinhVien là qua · không ngày mà không vinhVien thì máy chủ chặn (nohan) · cần nối mạng (canmang) */
+
+/* ═══ [BV4] nối app Xe hợp đồng với khối BẢO VỆ GIẤY PHÉP dùng chung (cuối trang). Không có khối đó thì app chạy y như cũ. ═══ */
+async function bv4Hoi(uid){   /* 1 lượt đọc nhỏ trong kho hd_: đọc được ⇒ giấy phép còn hạn THẬT theo giờ máy chủ */
+  try{ if(!uid) return ""; const s = await getDoc(doc(fdb, "users", uid, "hd_gac", "x")); return (s && s.metadata && s.metadata.fromCache === false) ? "ok" : ""; }
+  catch(e){ return (e && e.code === "permission-denied") ? "chan" : ""; }
+}
+async function bv4GacHd(l, snap){
+  try{
+    if(!window.BV4 || !l || !UID) return l;
+    const g = await window.BV4.gac("hd", UID, { ok: conHan(l) }, snap || { metadata:{ fromCache:true } }, ()=>bv4Hoi(UID));
+    return (g && g.reason === "canmang") ? { ...l, canmang: g.ly } : l;
+  }catch(e){ return l; }
+}
+function bv4Ctx(){ return { app:"hd", ver:"10.12.5", auth, db:fdb, fs:{ doc, getDoc, setDoc },
+  moGiaHan: ()=>{ try{ congGiaHan(); }catch(e){} }, dangXuat: ()=>{ try{ signOut(auth); }catch(e){} },
+  thuLai: async ()=>{ location.reload(); return true; } }; }
+const bv4LaChu = () => (auth.currentUser?.email||"").trim().toLowerCase() === (CFG.adminEmail||"").trim().toLowerCase();
+function bv4Khoa(acc){
+  try{
+    if(!acc) return;
+    if(acc.reason === "canmang"){ LIC = { ...(LIC||{}), canmang: acc.ly }; return congCanMang(acc.ly); }
+    if(acc.reason === "locked") LIC = { ...(LIC||{}), khoa: true };
+    else if(acc.reason === "nohan") LIC = { ...(LIC||{}), nohan: true, hanDen: "" };
+    else if(acc.reason === "expired" && acc.until) LIC = { ...(LIC||{}), vv: false, hanDen: dToS(acc.until), hanMs: acc.until.getTime() };
+    congGiaHan();
+  }catch(e){}
+}
+function bv4BiChoi(khongPhai){
+  try{
+    const u = UID; if(!u || bv4LaChu() || !window.BV4){ if(typeof khongPhai === "function") khongPhai(""); return; }
+    window.BV4.biChoi("hd", { uid:u, hoi:()=>bv4Hoi(u), docLic: async()=>{ const L = await getDoc(doc(fdb, `accounts/${u}/lic`, CFG.app)); return L.exists() ? L.data() : null; }, khoa:bv4Khoa, khongPhai });
+  }catch(e){}
+}
+async function bv4KiemHan(){ try{ if(!UID || bv4LaChu()) return; const l = await docGiayPhep(); if(!conHan(l)){ LIC = l; return l.canmang ? congCanMang(l.canmang) : congGiaHan(); }
+  if(l && l.vv !== true && Number(l.hanMs) > 0 && Date.now() > Number(l.hanMs)) bv4BiChoi(); }catch(e){} }   /* app so hạn theo NGÀY; đã qua đúng giờ hết hạn thì hỏi máy chủ cho chắc */
+function bv4LyDo(l){   /* dòng lý do ở đầu màn gia hạn: bị khoá · chưa đặt hạn · không mở được dùng thử */
+  const the = (ic, t)=> `<div class="alert" style="margin-bottom:12px"><span class="ic">${ic}</span><div>${t}</div></div>`;
+  if(l.khoa) return the("🔒", "<b>Tài khoản đang bị KHOÁ.</b> Gọi chủ phần mềm để được mở lại. Dữ liệu của bạn vẫn còn nguyên.");
+  if(l.thuLoi) return the("✉️", "<b>Chưa mở được dùng thử</b> cho tài khoản này. Mua gói bên dưới, hoặc gọi hotline để được hỗ trợ.");
+  if(l.nohan) return the("⚙️", "<b>Tài khoản chưa được đặt hạn</b> nên máy chủ chưa mở. Gọi chủ phần mềm để được mở ngay, hoặc gia hạn bên dưới.");
+  return "";
+}
+/* Màn "cần nối mạng" / "ngày giờ máy sai" (giống màn ngoại tuyến có sẵn) */
+function congCanMang(ly){
+  const x = (window.BV4 && window.BV4.loi({ ok:false, reason:"canmang", ly })) || { ic:"📶", tt:"Cần nối mạng", mg:"Hãy nối mạng rồi bấm Thử lại." };
+  moCong(`
+    <div class="card"><p style="font-size:30px;text-align:center;margin:0">${x.ic}</p>
+    <h3 style="text-align:center;margin:6px 0 10px">${esc(x.tt)}</h3><p class="mo" style="margin:0">${esc(x.mg)}</p></div>
+    <button class="btn pri blk" id="thuLaiBV4" style="margin-top:12px">🔄 Thử lại</button>
+    <button class="btn blk dan" id="raNgoaiBV4" style="margin-top:8px">Đăng xuất</button>
+    ${DONG_HOTRO}
+  `);
+  $("#thuLaiBV4").onclick  = ()=> location.reload();
+  $("#raNgoaiBV4").onclick = ()=> signOut(auth);
+  try{ if(window.BV4) window.BV4.tuMo("hd", { ok:false, reason:"canmang", ly }, UID, ()=>bv4Hoi(UID), ()=>{ const g = $("#gate"); return !!(g && g.classList.contains("on") && $("#thuLaiBV4")); }); }catch(e){}
+}
 
 /* ------------------------------ CỔNG VÀO ------------------------------ */
 function moCong(html){ $("#gate").classList.add("on"); $("#gateBody").innerHTML = html; hienHotline(false); }
@@ -811,16 +876,16 @@ const loi = e => ({
 
 window.congGiaHan = congGiaHan;
 function congGiaHan(){
-  const l = LIC||{}, con = l.hanDen ? cachNgay(l.hanDen, hnay()) : 9999;
+  const l = LIC||{}, con = (Number(l.hanMs) > 0 && l.vv !== true && Date.now() > Number(l.hanMs)) ? -1 : (l.hanDen ? cachNgay(l.hanDen, hnay()) : 9999);   /* [BV4] */
   const noiDung = ("HD " + (auth.currentUser?.email||"").split("@")[0]).slice(0,45);
   const qr = m => `https://img.vietqr.io/image/${bkBin()}-${bkSo()}-compact2.png?amount=${giaGiaHan(giaThang(),m)}`
     + `&addInfo=${encodeURIComponent(noiDung)}&accountName=${encodeURIComponent(bkTen())}`;
   const coBank = bkBin() && bkSo();
-  moCong(`
+  moCong(`${bv4LyDo(l)}
     <div class="card">
       <div class="kv"><span class="k">Tài khoản</span><span class="v">${esc(auth.currentUser?.email||"")}</span></div>
       <div class="kv"><span class="k">Gói</span><span class="v">${esc(l.goi||"—")}</span></div>
-      <div class="kv"><span class="k">Hạn dùng</span><span class="v" style="color:${con>=0?'var(--chay)':'var(--canh)'}">${l.hanDen?ngayVN(l.hanDen):"không giới hạn"} ${l.hanDen?(con>=0?`(còn ${con} ngày)`:"(đã hết hạn)"):""}</span></div>
+      <div class="kv"><span class="k">Hạn dùng</span><span class="v" style="color:${con>=0?'var(--chay)':'var(--canh)'}">${l.hanDen?ngayVN(l.hanDen):(l.nohan?"chưa đặt hạn":"không giới hạn")} ${l.hanDen?(con>=0?`(còn ${con} ngày)`:"(đã hết hạn)"):""}</span></div>
     </div>
     <div class="tabs" id="tbGoi">
       ${CFG.thang.map((m,i)=>`<button class="${i?"":"on"}" data-m="${m}">${m} tháng${thangTang(m)>0?" 🎁":""}</button>`).join("")}
@@ -862,7 +927,7 @@ function congGiaHan(){
   };
   $("#ktLai").onclick = async ()=>{
     try{ LIC = await docGiayPhep(); }catch(e){ return toast("Cần có mạng để kiểm tra lại",1); }
-    conHan(LIC) ? khoiDong() : toast("Hạn dùng chưa được cập nhật",1);
+    conHan(LIC) ? location.reload() : toast("Hạn dùng chưa được cập nhật",1);   /* [BV4] nạp lại TRỌN dữ liệu (trước đây vào app với kho trống, dễ ghi đè cấu hình nhà xe) */
   };
   $("#raNgoai").onclick = ()=> signOut(auth);
 }
@@ -871,16 +936,20 @@ function congGiaHan(){
 const CHIA = new URLSearchParams(location.search).get("ct");   // link tra cứu của tài xế
 onAuthStateChanged(auth, async u=>{
   if(CHIA) return;
-  if(!u){ UID=null; $("#topbar").style.display="none"; $("#nav").style.display="none"; return congDangNhap(); }
+  if(!u){ UID=null; try{ if(window.BV4) window.BV4.henHetHan("hd", 0); }catch(e){} $("#topbar").style.display="none"; $("#nav").style.display="none"; return congDangNhap(); }   /* [BV4] */
   UID = u.uid;
+  SH = {};   /* [BV4] tài khoản vừa đăng nhập: bỏ ảnh chụp cũ ⇒ chưa nạp xong thì không ghi (không ghi nhầm dữ liệu tài khoản trước) */
   moCong(`<p class="mo" style="text-align:center;padding:40px 0">Đang tải dữ liệu…</p>`);
   try{
     await napBilling();
     LIC = await docGiayPhep();
-    if(!conHan(LIC)) return congGiaHan();
+    if(!conHan(LIC)) return (LIC && LIC.canmang) ? congCanMang(LIC.canmang) : congGiaHan();   /* [BV4] */
     await STORE.nap();
     khoiDong();
+    try{ if(window.BV4 && !bv4LaChu()){ window.BV4.henHetHan("hd", LIC && LIC.vv !== true ? (Number(LIC.hanMs)||0) : 0, bv4KiemHan); window.BV4.nhip("hd", ()=>UID, ()=>bv4Hoi(UID), bv4BiChoi); } }catch(e){}   /* [BV4] tới giờ hết hạn tự khoá · 3 giờ xác nhận máy chủ 1 lần */
   }catch(e){
+    if(e && e.code === "permission-denied"){ bv4BiChoi(()=>congCanMang("saigio")); return; }   /* [BV4] máy chủ chối đọc ⇒ xét lý do thật (trước đây mở bằng bản lưu trên máy) */
+    if(e && e.message === "bv4-chua-co-du-lieu") return congNgoaiTuyen();   /* [BV4] máy mới + mất mạng: không mở trắng trơn */
     console.error(e);
     if(!navigator.onLine) return congNgoaiTuyen();
     congDangNhap("Không tải được dữ liệu: " + (e.message||e));
@@ -2143,7 +2212,7 @@ if(CHIA) xemLinkChiaSe(CHIA);
 <script type="module">
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-const APP_ID = "hd", APP_VERSION = "1.0.0";
+const APP_ID = "hd", APP_VERSION = "1.0.1";
 const FB = { apiKey:"AIzaSyA_kjQ-CdASRkf50Glz3kQajlkD5qGWC4k", authDomain:"so-no-cc57a.firebaseapp.com",
   projectId:"so-no-cc57a", storageBucket:"so-no-cc57a.firebasestorage.app",
   messagingSenderId:"571694791559", appId:"1:571694791559:web:8e409728a520e2d370b122" };
@@ -3531,5 +3600,373 @@ import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, serv
 </script>
 <!-- =================== HẾT ENGINE IN =================== -->
 
+<!-- ═══ [BV4] BẢO VỆ GIẤY PHÉP — khối dùng chung 4 app: Cafe · TrọSafe · NhàXe Pro · Xe hợp đồng (bản 2026-10-15). Không sửa tay. ═══ -->
+<script>
+/* Việc của khối này — app nào cũng gọi vào đây; khối có lỗi gì thì app chạy y như cũ (không khoá oan ai):
+   1) GÁC NGOẠI TUYẾN: vá lỗ "hết hạn rồi TẮT MẠNG + CHỈNH LÙI NGÀY GIỜ là vào dùng tiếp" (giống Sổ Nợ SN6). Máy nhớ 2 mốc
+      (localStorage 'bv4_gac_<app>'): t = giờ máy mới nhất từng thấy · s = lần gần nhất MÁY CHỦ xác nhận giấy phép còn hạn.
+      Chỉ xét khi giấy phép đọc từ BẢN LƯU TRONG MÁY: giờ máy lùi hơn 2 tiếng ⇒ 'lui' · quá 7 ngày chưa được xác nhận ⇒ 'lau'.
+   2) MÁY CHỦ CHỐI ⇒ KHOÁ ĐÚNG LÝ DO: đang mở app mà hết hạn / bị khoá / ngày giờ máy sai thì hiện màn khoá kèm lý do thật,
+      thay vì báo "Rules chưa cập nhật" hay để khách bấm hoài không lưu được. Tới đúng giờ hết hạn cũng tự khoá.
+   3) KHOÁ HỘP THƯ DÙNG THỬ (trialKeys — Rules VÁ LỖ Z7): mỗi hộp thư thật chỉ dùng thử 1 lần; công tắc xác minh email bật
+      thì gửi thư xác minh và có nút "Tôi đã xác minh". Công thức hộp thư thật y hệt Rules + app Sổ Nợ.
+   4) CHẶN NHẬP FILE SAO LƯU khi đang dùng thử: chặn đường "xuất dữ liệu → tạo email mới → dùng thử → nhập lại".
+   5) BẢNG 👑 NHÚNG CHỈ CÒN XEM: duyệt / gia hạn / khoá / vĩnh viễn / đổi tài khoản nhận tiền chỉ làm ở app Quản Trị
+      (có nhập lại mật khẩu, nhật ký, sổ doanh thu đúng giá). */
+(function(){
+  'use strict';
+  if (window.BV4) return;
+  var NGAY = 86400000, LUI = 2 * 3600000, NGAY_NGOAI = 7, HOT = '0977 823 979', HOT_SO = '0977823979';
+  var QT = 'https://cuahangminhtri1-sono.github.io/admin/';
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+  function coHan(p, ms, md){ return Promise.race([ p, new Promise(function(z){ setTimeout(function(){ z(md); }, ms); }) ]); }
+  function bao(m){
+    try{
+      var x = document.getElementById('bv4-bao');
+      if(!x){ x = document.createElement('div'); x.id = 'bv4-bao';
+        x.style.cssText = 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:2147483600;background:#111826;color:#fff;padding:11px 16px;border-radius:10px;font:600 13.5px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;max-width:88%;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:opacity .4s';
+        document.body.appendChild(x); }
+      x.textContent = m; x.style.opacity = '1'; x.style.display = 'block';
+      clearTimeout(x._t); x._t = setTimeout(function(){ x.style.opacity = '0'; }, 3800);
+    }catch(e){}
+  }
+
+  /* ───────── 1) GÁC NGOẠI TUYẾN ───────── */
+  function tenKhoa(app){ return 'bv4_gac_' + app; }
+  function docMoc(app){
+    var s; try{ s = localStorage.getItem(tenKhoa(app)); }catch(e){ return null; }            /* máy không cho dùng bộ nhớ ⇒ bỏ qua hẳn */
+    try{ var o = JSON.parse(s || '{}'); return (o && typeof o === 'object' && !Array.isArray(o)) ? o : {}; }catch(e){ return {}; }
+  }
+  function ghiMoc(app, uid, xacNhan){
+    try{
+      var o = docMoc(app); if(!o || !uid) return;
+      var g = (o[uid] && typeof o[uid] === 'object') ? o[uid] : {}, now = Date.now();
+      if(xacNhan){ g.t = now; g.s = now; }
+      else if(!(Number(g.t) >= now)) g.t = now;                                              /* mốc t chỉ tiến, không bao giờ lùi */
+      o[uid] = g;
+      var ks = Object.keys(o);
+      if(ks.length > 20){ ks.sort(function(a, b){ return (Number((o[a] || {}).t) || 0) - (Number((o[b] || {}).t) || 0); }); for(var i = 0; i < ks.length - 20; i++) delete o[ks[i]]; }
+      localStorage.setItem(tenKhoa(app), JSON.stringify(o));
+    }catch(e){}
+  }
+  var HOI = {};
+  function hoiTT(app){ return HOI[app] || (HOI[app] = { luc:0, ok:0 }); }
+  /* Hỏi máy chủ 1 lượt đọc nhỏ (fn do app đưa vào): 'ok' = máy chủ trả lời VÀ cho đọc (giấy phép còn hạn thật) · 'chan' = máy chủ chối · '' = chưa hỏi được */
+  async function hoi(app, uid, fn){
+    try{
+      if(!uid || typeof fn !== 'function') return '';
+      var h = hoiTT(app); h.luc = Date.now();
+      var k = await coHan(Promise.resolve().then(fn), 15000, '');
+      if(k === 'ok'){ h.ok = Date.now(); ghiMoc(app, uid, true); }
+      return k || '';
+    }catch(e){ return ''; }
+  }
+  async function cho(app, uid, fn, ms){
+    var t0 = Date.now();
+    for(var i = 0; i < 8; i++){
+      var k = await hoi(app, uid, fn);
+      if(k === 'ok') return true;
+      if(k === 'chan') return false;
+      var qua = Date.now() - t0;
+      if(qua < 0 || qua + 2500 > ms) return false;
+      await new Promise(function(z){ setTimeout(z, 2500); });
+    }
+    return false;
+  }
+  async function gac(app, uid, r, snap, fn){
+    try{
+      if(!uid || !r) return r;
+      var kq = r;
+      if(r.ok === true && !r.admin){
+        var md = (snap && snap.metadata) || null;
+        if(md && md.fromCache === true){                                                     /* giấy phép đọc từ BẢN LƯU TRONG MÁY */
+          var o = docMoc(app), g = (o && o[uid] && typeof o[uid] === 'object') ? o[uid] : null, now = Date.now();
+          var t = g ? (Number(g.t) || 0) : 0, s = g ? (Number(g.s) || 0) : 0, ly = '';
+          if(t && now < t - LUI) ly = 'lui';
+          else if(s && now - s > NGAY_NGOAI * NGAY) ly = 'lau';
+          if(ly && navigator.onLine !== false && (await cho(app, uid, fn, 9000))) ly = '';    /* máy báo có mạng ⇒ chờ máy chủ xác nhận */
+          if(ly) kq = { ok:false, reason:'canmang', ly:ly };
+        } else if(md && md.fromCache === false) hoi(app, uid, fn);                           /* có mạng ⇒ xin xác nhận để ghi mốc (không chờ) */
+      }
+      ghiMoc(app, uid, false);
+      return kq;
+    }catch(e){ return r; }
+  }
+  /* Đang ở màn "cần nối mạng": 12 giây hỏi máy chủ 1 lần. Xác nhận còn hạn ⇒ tự tải lại để vào app. */
+  var TIM = {};
+  function tuMo(app, acc, uid, fn, conManKhoa){
+    try{
+      if(TIM[app]){ clearInterval(TIM[app]); TIM[app] = null; }
+      if(!acc || acc.reason !== 'canmang' || acc.ly === 'saigio' || !uid) return;
+      TIM[app] = setInterval(async function(){
+        try{
+          if(typeof conManKhoa === 'function' && !conManKhoa()){ clearInterval(TIM[app]); TIM[app] = null; return; }
+          if(navigator.onLine === false) return;
+          var k = await hoi(app, uid, fn);
+          if(k === 'ok'){ clearInterval(TIM[app]); TIM[app] = null; location.reload(); }
+          else if(k === 'chan'){ clearInterval(TIM[app]); TIM[app] = null; }
+        }catch(e){}
+      }, 12000);
+    }catch(e){}
+  }
+
+  /* ───────── 2) MÁY CHỦ CHỐI ⇒ KHOÁ ĐÚNG LÝ DO ───────── */
+  function msHan(v){
+    try{
+      if(v == null || v === '' || typeof v === 'string' || typeof v === 'boolean') return NaN;  /* chuỗi: máy chủ KHÔNG coi là hạn */
+      if(typeof v === 'number') return v;
+      if(typeof v.toMillis === 'function') return v.toMillis();
+      if(typeof v.toDate === 'function') return v.toDate().getTime();
+      if(v instanceof Date) return v.getTime();
+      if(typeof v.seconds === 'number') return v.seconds * 1000;
+      return NaN;
+    }catch(e){ return NaN; }
+  }
+  /* d = giấy phép đọc lại sau khi máy chủ CHỐI. Trả lý do khoá, hoặc null nếu không phải do giấy phép. */
+  function phanLoai(d){
+    if(!d) return { ok:false, reason:'pending' };
+    if(d.active === false) return { ok:false, reason:'locked' };
+    if(d.vinhVien === true) return null;
+    var ms = msHan(d.paidUntil);
+    if(!isFinite(ms)) return { ok:false, reason:'nohan' };
+    if(ms <= Date.now()) return { ok:false, reason:'expired', until:new Date(ms), trial:!!d.trial };
+    return { ok:false, reason:'canmang', ly:'saigio' };                                       /* máy chủ nói hết, giờ máy nói còn ⇒ giờ máy chậm */
+  }
+  var DANG = {};
+  /* o = { uid, hoi:fn, docLic:async()=>data|null, khoa:(acc)=>void, khongPhai:(k)=>void } */
+  async function biChoi(app, o){
+    if(!o || !o.uid || DANG[app]) return;
+    DANG[app] = true;
+    try{
+      var k = await hoi(app, o.uid, o.hoi);                                                   /* hỏi lại cho chắc (1 lượt đọc) */
+      if(k === 'chan'){
+        var d; try{ d = await coHan(Promise.resolve().then(o.docLic), 15000, undefined); }catch(e){ d = undefined; }
+        if(d !== undefined){
+          var acc = phanLoai(d);
+          if(acc && !acc.ok){ try{ o.khoa(acc); }catch(e){} return; }
+        }
+      }
+      if(typeof o.khongPhai === 'function'){ try{ o.khongPhai(k); }catch(e){} }
+    }catch(e){}
+    finally{ setTimeout(function(){ DANG[app] = false; }, 20000); }
+  }
+  /* Tới đúng giờ hết hạn (theo giờ máy) thì app tự xét lại giấy phép; quay lại app sau khi tắt màn hình cũng xét. */
+  var HEN = {};
+  function henHetHan(app, ms, fn){
+    try{
+      if(HEN[app] && HEN[app].t) clearTimeout(HEN[app].t);
+      HEN[app] = null;
+      if(!ms || !isFinite(ms) || typeof fn !== 'function') return;
+      var h = HEN[app] = { u:ms, fn:fn, t:null }, con = ms - Date.now() + 3000;
+      if(con <= 0) h.t = setTimeout(function(){ try{ fn(); }catch(e){} }, 1500);
+      else if(con < 2147000000) h.t = setTimeout(function(){ try{ fn(); }catch(e){} }, con);
+    }catch(e){}
+  }
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) return;
+    for(var a in HEN){ var h = HEN[a]; if(h && h.u && Date.now() > h.u){ try{ h.fn(); }catch(e){} } }
+  });
+  /* Đang ở trong app: 5 phút xét 1 lần (và khi quay lại app) — quá 3 giờ chưa được máy chủ xác nhận thì hỏi 1 lượt (rẻ: vài lượt đọc/ngày). */
+  var NHIP = {};
+  function nhip(app, layUid, fn, khiChan){
+    try{
+      NHIP[app] = { layUid:layUid, fn:fn, khiChan:khiChan };
+      if(NHIP['_t' + app]) return;
+      var chay = function(){
+        try{
+          var x = NHIP[app]; if(!x) return;
+          var uid = x.layUid && x.layUid(); if(!uid || navigator.onLine === false) return;
+          var h = hoiTT(app), n = Date.now();
+          if(Math.abs(n - h.ok) > 3 * 3600000 && Math.abs(n - h.luc) > 60000)
+            hoi(app, uid, x.fn).then(function(k){ if(k === 'chan' && typeof x.khiChan === 'function') x.khiChan(); });
+        }catch(e){}
+      };
+      NHIP['_t' + app] = setInterval(chay, 5 * 60000);
+      document.addEventListener('visibilitychange', function(){ if(!document.hidden) chay(); });
+    }catch(e){}
+  }
+  /* Lời cho các lý do mới trên màn khoá của app */
+  function loi(acc){
+    if(!acc) return null;
+    if(acc.reason === 'nohan') return { ic:'⚙️', tt:'Tài khoản chưa được đặt hạn', mg:'Giấy phép chưa có ngày hết hạn nên máy chủ chưa mở. Gọi chủ phần mềm (' + HOT + ') để được mở ngay, hoặc bấm Gia hạn.', nut:'giahan' };
+    if(acc.reason !== 'canmang') return null;
+    if(acc.ly === 'lui') return { ic:'🕒', tt:'Ngày giờ trên máy đang sai', mg:'Ngày giờ của máy đang chậm hơn lần dùng trước nên chưa xác nhận được giấy phép. Hãy chỉnh lại ngày giờ cho đúng (bật "Tự động đặt ngày giờ"), nối mạng rồi bấm Thử lại. Dữ liệu của bạn vẫn còn nguyên.', nut:'thulai' };
+    if(acc.ly === 'saigio') return { ic:'🕒', tt:'Ngày giờ trên máy đang sai', mg:'Máy chủ báo giấy phép KHÔNG còn hiệu lực, nhưng ngày giờ trên máy đang chậm nên app tưởng còn hạn. Hãy bật "Tự động đặt ngày giờ" trong cài đặt điện thoại rồi bấm Thử lại. Ngày giờ đã đúng mà vẫn báo thì gọi ' + HOT + '. Dữ liệu của bạn vẫn còn nguyên.', nut:'thulai' };
+    if(acc.ly === 'dau') return { ic:'📶', tt:'Cần nối mạng để tải dữ liệu lần đầu', mg:'Máy này chưa có bản dữ liệu nào để mở khi mất mạng. Hãy bật Wi-Fi hoặc 4G rồi bấm Thử lại — chỉ cần một lần, sau đó dùng ngoại tuyến bình thường. Dữ liệu của bạn trên máy chủ vẫn còn nguyên.', nut:'thulai' };
+    return { ic:'📶', tt:'Cần nối mạng để xác nhận giấy phép', mg:'Máy đã dùng ngoại tuyến quá ' + NGAY_NGOAI + ' ngày. Hãy bật Wi-Fi hoặc 4G rồi bấm Thử lại — chỉ cần nối mạng một lần. Dữ liệu của bạn vẫn còn nguyên.', nut:'thulai' };
+  }
+
+  /* ───────── 3) KHOÁ HỘP THƯ DÙNG THỬ + XÁC MINH EMAIL ───────── */
+  /* c = { app, ver, auth, db, fs:{doc,getDoc,setDoc,serverTimestamp?}, moGiaHan(), dangXuat(), thuLai() } */
+  function hopThuThat(e){                                   /* y hệt Rules hopThuThat() + Sổ Nợ snHopThuThat() */
+    e = String(e || '').toLowerCase(); var p = e.split('@'); if(p.length !== 2) return '';
+    var ten = p[0].split('+')[0], mien = (p[1] === 'googlemail.com') ? 'gmail.com' : p[1];
+    if(mien === 'gmail.com') ten = ten.replace(/\./g, '');
+    return ten + '@' + mien;
+  }
+  async function giuKhoaGoc(c){
+    try{
+      var u = c.auth.currentUser; if(!u) return 'loi';
+      var k = hopThuThat(u.email); if(!k || k.indexOf('/') >= 0) return 'loi';
+      var ref = c.fs.doc(c.db, 'trialKeys', k);
+      try{ await c.fs.setDoc(ref, { uid:u.uid, at:(typeof c.fs.serverTimestamp === 'function' ? c.fs.serverTimestamp() : new Date()) }); return 'ok'; }
+      catch(e){
+        if(!e || e.code !== 'permission-denied') return 'loi';
+        try{ var s = await c.fs.getDoc(ref); return (s.exists() && (s.data() || {}).uid === u.uid) ? 'ok' : 'khac'; }
+        catch(e2){ return (e2 && e2.code === 'permission-denied') ? 'khac' : 'loi'; }
+      }
+    }catch(e){ return 'loi'; }
+  }
+  async function cfgThu(c){
+    try{ var s = await c.fs.getDoc(c.fs.doc(c.db, 'billing', 'config')); var d = (s.exists() && s.data()) || {}; return { xm:d.thuXacMinh === true, bd:d.chanBiDanh !== false }; }
+    catch(e){ return { xm:false, bd:true }; }
+  }
+  var XM = 'bv4_xm_v1';
+  async function guiXacMinh(c, tuDong){
+    var noi = function(m){ if(!tuDong) bao(m); };
+    try{
+      var u = c.auth.currentUser; if(!u || !u.email) return false;
+      if(u.emailVerified){ noi('✅ Email này đã xác minh rồi — bấm "Tôi đã xác minh" nhé.'); return true; }
+      var nho = {}; try{ nho = JSON.parse(localStorage.getItem(XM) || '{}') || {}; }catch(_){ nho = {}; }
+      var truoc = Number(nho[u.uid]) || 0, cach = Date.now() - truoc;
+      if(truoc && cach >= 0 && cach < (tuDong ? 600000 : 60000)){ noi('📨 Thư vừa gửi rồi — đợi 1 phút rồi bấm gửi lại nhé. Nhớ xem cả mục Spam / Thư rác.'); return true; }
+      var m = await import('https://www.gstatic.com/firebasejs/' + (c.ver || '10.12.0') + '/firebase-auth.js');
+      var lc = c.auth.languageCode; try{ c.auth.languageCode = 'vi'; }catch(_){}               /* thư bằng tiếng Việt; gửi xong trả lại như cũ */
+      try{ await m.sendEmailVerification(u); }finally{ try{ c.auth.languageCode = lc; }catch(_){} }
+      try{ var o = {}; o[u.uid] = Date.now(); localStorage.setItem(XM, JSON.stringify(o)); }catch(_){}
+      noi('📨 Đã gửi thư xác minh tới ' + u.email + '. Nhớ xem cả mục Spam / Thư rác.');
+      return true;
+    }catch(e){
+      noi((e && e.code === 'auth/too-many-requests') ? '⏳ Gửi nhiều lần quá — đợi vài phút rồi thử lại nhé.' : '❌ Chưa gửi được thư xác minh. Kiểm tra mạng rồi thử lại.');
+      return false;
+    }
+  }
+  /* 'ok' giữ được khoá · 'khac' hộp thư đã dùng thử ở tài khoản khác · 'bidanh' email "+" · 'xacminh' cần xác minh email · 'loi' */
+  async function giuKhoa(c){
+    var kq = 'loi';
+    try{ kq = await coHan(giuKhoaGoc(c), 12000, 'loi'); }catch(e){ kq = 'loi'; }
+    try{
+      if(kq !== 'khac') return kq;
+      var u = c.auth.currentUser; if(!u || !u.email) return kq;
+      var cf = await coHan(cfgThu(c), 9000, { xm:false, bd:true });
+      if(cf.bd && /\+[^@]*@/.test(u.email)) return 'bidanh';
+      if(!cf.xm) return kq;
+      if(!u.emailVerified){ try{ await u.reload(); }catch(_){} u = c.auth.currentUser; if(!u) return kq; }
+      if(u.emailVerified){ try{ await u.getIdToken(true); }catch(_){} return await coHan(giuKhoaGoc(c), 12000, 'loi'); }
+      await guiXacMinh(c, true);
+      return 'xacminh';
+    }catch(e){ return kq; }
+  }
+  function lop(html){
+    var m = document.getElementById('bv4-lop');
+    if(!m){ m = document.createElement('div'); m.id = 'bv4-lop';
+      m.style.cssText = 'position:fixed;inset:0;z-index:2147483000;background:rgba(10,14,20,.72);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+      document.body.appendChild(m); }
+    m.innerHTML = '<div style="background:#fff;color:#1b2430;max-width:420px;width:100%;box-sizing:border-box;border-radius:16px;padding:20px 18px;box-shadow:0 12px 40px rgba(0,0,0,.4);max-height:90vh;overflow:auto;line-height:1.5">' + html + '</div>';
+    m.style.display = 'flex';
+    return m;
+  }
+  function dongLop(){ var m = document.getElementById('bv4-lop'); if(m) m.style.display = 'none'; }
+  function nut(id, chu, xanh){ return '<button type="button" id="' + id + '" style="display:block;width:100%;box-sizing:border-box;margin-top:9px;border:' + (xanh ? '0' : '1.5px solid #d5dbe1') + ';border-radius:11px;padding:12px;font-weight:800;font-size:15px;cursor:pointer;background:' + (xanh ? '#16a34a' : '#fff') + ';color:' + (xanh ? '#fff' : '#1b2430') + '">' + chu + '</button>'; }
+  function gan(id, fn){ var b = document.getElementById(id); if(b) b.onclick = function(){ fn(b); }; }
+  async function daXacMinh(c){
+    try{
+      var u = c.auth.currentUser; if(!u) return;
+      try{ await u.reload(); }catch(e){ bao('📶 Chưa kiểm tra được — xem lại mạng rồi bấm lại nhé.'); return; }
+      var x = c.auth.currentUser;
+      if(!x || !x.emailVerified){ alert('✉️ Chưa thấy xác minh.\n\nHãy mở hộp thư ' + (u.email || '') + ' (xem cả mục Spam / Thư rác), bấm vào đường link trong thư, rồi quay lại bấm nút này lần nữa.'); return; }
+      try{ await x.getIdToken(true); }catch(_){}
+      dongLop();
+      if(typeof c.thuLai === 'function') await c.thuLai();                                   /* app tự giữ khoá + mở dùng thử */
+    }catch(e){ bao('❌ Chưa mở được dùng thử. Hãy tải lại trang.'); }
+  }
+  /* Không mở được dùng thử ⇒ nói rõ lý do + lối mua gói (thay cho lời "Chưa mở được dùng thử. Tải lại trang.") */
+  function baoThuLoi(c, kt){
+    try{
+      window.__bv4DaBao = true;
+      var u = c && c.auth && c.auth.currentUser, mail = (u && u.email) || '';
+      var tt, mg, nuts = '';
+      if(kt === 'xacminh'){
+        tt = '✉️ Xác minh email để bắt đầu dùng thử';
+        mg = 'Thư xác minh đã được gửi tới <b>' + esc(mail || 'email của bạn') + '</b>. Hãy mở hộp thư (xem cả mục <b>Spam / Thư rác</b>), bấm vào đường link trong thư, rồi quay lại đây bấm <b>"Tôi đã xác minh"</b>.';
+        nuts = nut('bv4-xm-ok', '✅ Tôi đã xác minh — bắt đầu dùng thử', 1) + nut('bv4-xm-gui', '📨 Gửi lại thư xác minh', 0);
+      } else if(kt === 'bidanh'){
+        tt = '✉️ Email bí danh không dùng thử được';
+        mg = 'Email có dấu <b>"+"</b> (email bí danh) không mở được dùng thử. Hãy đăng ký bằng email thường, hoặc mua gói cho tài khoản này.';
+        nuts = nut('bv4-mua', '💳 Mua gói / Gia hạn', 1);
+      } else if(kt === 'khac'){
+        tt = '✉️ Hộp thư này đã dùng thử rồi';
+        mg = 'Hộp thư email này đã dùng thử ở một tài khoản khác. Gmail coi <b>ten@gmail.com</b>, <b>t.en@gmail.com</b> và <b>ten+1@gmail.com</b> là CÙNG một hộp thư nên chỉ được dùng thử 1 lần. Hãy đăng nhập lại tài khoản cũ để dùng tiếp, hoặc mua gói cho tài khoản này.';
+        nuts = nut('bv4-mua', '💳 Mua gói / Gia hạn', 1);
+      } else {
+        tt = '❌ Chưa mở được dùng thử';
+        mg = 'Máy chủ chưa cho mở dùng thử cho tài khoản này. Kiểm tra mạng rồi bấm Thử lại; vẫn không được thì mua gói hoặc gọi hotline để được hỗ trợ.';
+        nuts = nut('bv4-thulai', '🔄 Thử lại', 1) + nut('bv4-mua', '💳 Mua gói / Gia hạn', 0);
+      }
+      nuts += '<a href="tel:' + HOT_SO + '" style="display:block;text-align:center;margin-top:9px;background:#0f7a3d;color:#fff;border-radius:11px;padding:12px;font-weight:800;text-decoration:none;font-size:15px">📞 Gọi hotline hỗ trợ: ' + HOT + '</a>';
+      nuts += nut('bv4-ra', 'Đăng xuất' + (mail ? ' (' + esc(mail) + ')' : ''), 0) + nut('bv4-dong', 'Đóng', 0);
+      lop('<div style="font-size:19px;font-weight:800;margin:0 0 8px">' + tt + '</div><div style="font-size:14.5px;color:#36414d">' + mg + '</div>' + nuts);
+      gan('bv4-xm-ok', function(){ daXacMinh(c); });
+      gan('bv4-xm-gui', function(){ guiXacMinh(c, false); });
+      gan('bv4-mua', function(){ dongLop(); try{ if(c && c.moGiaHan) c.moGiaHan(); }catch(e){} });
+      gan('bv4-thulai', function(){ location.reload(); });
+      gan('bv4-ra', function(){ dongLop(); try{ if(c && c.dangXuat) c.dangXuat(); }catch(e){} });
+      gan('bv4-dong', dongLop);
+    }catch(e){}
+  }
+
+  /* ───────── 4) CHẶN NHẬP FILE SAO LƯU KHI ĐANG DÙNG THỬ ───────── */
+  var ACC = {};
+  function datAcc(app, acc){ ACC[app] = acc || null; }
+  function chanNhap(app){
+    try{
+      var a = ACC[app];
+      if(!a || a.admin || a.trial !== true) return false;
+      alert('🎁 Tài khoản đang DÙNG THỬ nên chưa nhập được dữ liệu từ tệp sao lưu.\n\nĐây là cách chặn việc đổi tài khoản để dùng thử mãi.\n\n• Mua gói (bấm Gia hạn) xong là nhập được ngay.\n• Muốn mang dữ liệu cũ sang tài khoản mới: gọi ' + HOT + '.');
+      return true;
+    }catch(e){ return false; }
+  }
+
+  /* ───────── 5) BẢNG 👑 NHÚNG TRONG APP CHỈ CÒN XEM ───────── */
+  var GHI = ['adminGrantApp', 'adminUnlockApp', 'adminActivate', 'adminLock', 'adminUnlock', 'adminDismissReq', 'adminDismiss',
+             'adminGrant', 'adminGrantMonths', 'adminGrantManual', 'saveBilling', 'openBilling', 'saveBillingConfig', 'openBillingConfig'];
+  function chiXem(){
+    try{
+      if(confirm('👑 Bảng quản trị trong app này nay CHỈ ĐỂ XEM.\n\nDuyệt đơn · gia hạn · khoá / mở khoá · vĩnh viễn · đổi tài khoản nhận tiền: làm trong app QUẢN TRỊ (có nhập lại mật khẩu, có nhật ký, ghi sổ doanh thu đúng giá).\n\nMở app Quản Trị ngay?')){
+        try{ var w = window.open(QT, '_blank'); if(!w) location.href = QT; }catch(e){ location.href = QT; }
+      }
+    }catch(e){}
+    return false;
+  }
+  chiXem.__bv4 = true;
+  function bangChiXem(){
+    try{
+      var l = document.getElementById('admin-list'); if(!l || !l.parentNode) return;
+      if(document.getElementById('bv4-chixem')) return;
+      var b = document.createElement('div'); b.id = 'bv4-chixem';
+      b.style.cssText = 'margin:0 0 12px;padding:11px 13px;border-radius:12px;background:#fff8e1;border:1.5px solid #f0c36d;color:#7a4b00;font:600 13.5px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+      b.innerHTML = '👀 Bảng này <b>chỉ để XEM</b>. Duyệt đơn · gia hạn · khoá · vĩnh viễn · đổi tài khoản nhận tiền làm trong <a href="' + QT + '" target="_blank" rel="noopener" style="color:#0b5cad;font-weight:800">app Quản Trị →</a>';
+      l.parentNode.insertBefore(b, l);
+    }catch(e){}
+  }
+  function khoaBang(){
+    try{
+      GHI.forEach(function(n){ if(typeof window[n] === 'function' && !window[n].__bv4) window[n] = chiXem; });
+      var oa = window.openAdmin;
+      if(typeof oa === 'function' && !oa.__bv4){
+        var moi = function(){ var r; try{ r = oa.apply(this, arguments); }finally{ bangChiXem(); } return r; };
+        moi.__bv4 = true; window.openAdmin = moi;
+      }
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded', khoaBang);           /* chạy SAU mọi khối module của app (module chạy trước DOMContentLoaded) */
+  window.addEventListener('load', function(){ khoaBang(); setTimeout(khoaBang, 2500); });
+
+  window.BV4 = { ban:'2026-10-15', gac:gac, hoi:hoi, tuMo:tuMo, phanLoai:phanLoai, biChoi:biChoi, henHetHan:henHetHan, nhip:nhip, loi:loi, msHan:msHan,
+                 hopThuThat:hopThuThat, giuKhoa:giuKhoa, guiXacMinh:guiXacMinh, baoThuLoi:baoThuLoi, datAcc:datAcc, chanNhap:chanNhap, khoaBang:khoaBang };
+})();
+</script>
+<!-- ═══ HẾT [BV4] ═══ -->
 </body>
 </html>
