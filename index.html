@@ -877,9 +877,9 @@ const loi = e => ({
 window.congGiaHan = congGiaHan;
 function congGiaHan(){
   const l = LIC||{}, con = (Number(l.hanMs) > 0 && l.vv !== true && Date.now() > Number(l.hanMs)) ? -1 : (l.hanDen ? cachNgay(l.hanDen, hnay()) : 9999);   /* [BV4] */
-  const noiDung = ("HD " + (auth.currentUser?.email||"").split("@")[0]).slice(0,45);
+  const noiDung = ("HD " + (auth.currentUser?.email||"").split("@")[0]).slice(0,45), noiCK = "SEVQR " + noiDung;   /* [1.0.2] VietinBank chỉ báo cho SePay khi nội dung CK bắt đầu bằng SEVQR (đơn vẫn lưu noiDung cũ) */
   const qr = m => `https://img.vietqr.io/image/${bkBin()}-${bkSo()}-compact2.png?amount=${giaGiaHan(giaThang(),m)}`
-    + `&addInfo=${encodeURIComponent(noiDung)}&accountName=${encodeURIComponent(bkTen())}`;
+    + `&addInfo=${encodeURIComponent(noiCK)}&accountName=${encodeURIComponent(bkTen())}`;
   const coBank = bkBin() && bkSo();
   moCong(`${bv4LyDo(l)}
     <div class="card">
@@ -897,7 +897,7 @@ function congGiaHan(){
       <div class="kv"><span class="k">Ngân hàng</span><span class="v">${esc(BILL.bankName||"")}</span></div>
       <div class="kv"><span class="k">Số tài khoản</span><span class="v copy" data-c="${esc(bkSo())}">${esc(bkSo())}</span></div>
       <div class="kv"><span class="k">Chủ tài khoản</span><span class="v">${esc(bkTen())}</span></div>
-      <div class="kv"><span class="k">Nội dung bắt buộc</span><span class="v copy" data-c="${esc(noiDung)}">${esc(noiDung)}</span></div>` : `
+      <div class="kv"><span class="k">Nội dung bắt buộc</span><span class="v copy" data-c="${esc(noiCK)}">${esc(noiCK)}</span></div>` : `
       <p class="sm mo" style="margin:6px 0 0">Chủ phần mềm chưa khai số tài khoản nhận tiền. Bấm nút bên dưới để báo, bên mình sẽ liên hệ lại.</p>`}
     </div>
     <div id="kmSave" style="margin:8px 0 0"></div>
@@ -2212,7 +2212,7 @@ if(CHIA) xemLinkChiaSe(CHIA);
 <script type="module">
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-const APP_ID = "hd", APP_VERSION = "1.0.1";
+const APP_ID = "hd", APP_VERSION = "1.0.2";
 const FB = { apiKey:"AIzaSyA_kjQ-CdASRkf50Glz3kQajlkD5qGWC4k", authDomain:"so-no-cc57a.firebaseapp.com",
   projectId:"so-no-cc57a", storageBucket:"so-no-cc57a.firebasestorage.app",
   messagingSenderId:"571694791559", appId:"1:571694791559:web:8e409728a520e2d370b122" };
